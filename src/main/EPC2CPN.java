@@ -10,20 +10,24 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
-import object.Model;
-import object.Project;
+import object.visualparadigm.Connector;
+import object.visualparadigm.Connectors;
+import object.visualparadigm.Diagram;
+import object.visualparadigm.Project;
+import object.visualparadigm.Shape;
+import object.visualparadigm.Shapes;
 
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
@@ -38,6 +42,9 @@ import java.awt.Color;
 import java.awt.Desktop;
 
 import javax.swing.JMenuItem;
+import javax.swing.JTree;
+import javax.swing.border.LineBorder;
+import javax.swing.JScrollPane;
 
 
 public class EPC2CPN extends JFrame implements ActionListener {
@@ -62,9 +69,14 @@ public class EPC2CPN extends JFrame implements ActionListener {
 	private JButton btnGenerateCPN;
 	private JButton btnOpenCpnTools;
 	private JButton btnViewEPCElement;
+	private JTree treeResult;
 	
 	private File selectedFile;
 	private String elementInfo = "No Data";
+	private Shapes elementShapes = null;
+	private Connectors elementConnectors = null;
+	
+	private Map<String, Shape> mapShape = null;
 
 	/**
 	 * Launch the application.
@@ -88,7 +100,7 @@ public class EPC2CPN extends JFrame implements ActionListener {
 	public EPC2CPN() {
 		setResizable(false);
 		setTitle("EPC2CPN");
-		setBounds(100, 100, 760, 400);
+		setBounds(100, 100, 900, 620);
 		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		addWindowListener( new WindowAdapter() {
@@ -186,19 +198,33 @@ public class EPC2CPN extends JFrame implements ActionListener {
 		contentPane.add(lblResult3);
 		
 		btnGenerateCPN = new JButton("Generate CPN");
-		btnGenerateCPN.setBounds(310, 290, 150, 23);
+		btnGenerateCPN.setBounds(734, 211, 150, 23);
 		btnGenerateCPN.addActionListener(this);
 		contentPane.add(btnGenerateCPN);
 		
 		btnOpenCpnTools = new JButton("Open CPN Tools");
-		btnOpenCpnTools.setBounds(480, 290, 150, 23);
+		btnOpenCpnTools.setBounds(734, 236, 150, 23);
 		btnOpenCpnTools.addActionListener(this);
 		contentPane.add(btnOpenCpnTools);
 		
 		btnViewEPCElement = new JButton("View EPC Element");
-		btnViewEPCElement.setBounds(140, 290, 150, 23);
+		btnViewEPCElement.setBounds(734, 186, 150, 23);
 		btnViewEPCElement.addActionListener(this);
 		contentPane.add(btnViewEPCElement);
+		
+		// Tree
+		DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("empty");
+		treeResult = new JTree(rootNode);
+		treeResult.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		treeResult.setShowsRootHandles(true);
+		treeResult.setBorder(new LineBorder(new Color(0, 0, 0)));
+		treeResult.setBounds(20, 280, 360, 260);
+		
+		// Scroll Pane
+		JScrollPane scroll = new JScrollPane();
+		scroll.setBounds(20, 280, 360, 260);
+		scroll.setViewportView(treeResult);
+		contentPane.add(scroll);
 	}
 	
 	private void resetResultText() {
@@ -248,7 +274,6 @@ public class EPC2CPN extends JFrame implements ActionListener {
 			if (result == JFileChooser.APPROVE_OPTION) {
 				selectedFile = fileChooser.getSelectedFile();
 				textField.setText(selectedFile.getAbsolutePath().toString());
-				
 			}
 		}
 		
@@ -265,6 +290,10 @@ public class EPC2CPN extends JFrame implements ActionListener {
 				double kilobytes = (selectedFile.length() / 1024);
 				lblResult2.setFont(new Font("Tahoma", Font.BOLD, 11));
 				lblResult2.setText(String.valueOf(kilobytes) + " KB");
+				
+				elementShapes = null;
+				elementConnectors = null;
+				mapShape = null;
 				
 				try {
 					// 1. Check & Add XML Namespace
@@ -290,61 +319,64 @@ public class EPC2CPN extends JFrame implements ActionListener {
 					Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 					Project project = (Project) unmarshaller.unmarshal(selectedFile);
 					
-					int sumEvent = 0;
-					int sumFunction = 0;
-					int sumProcessPath = 0;
-					int sumAndOperator = 0;
-					int sumOrOperator = 0;
-					int sumXorOperator = 0;
-					int sumInfoResource = 0;
-					int sumOrgUnit = 0;
-					int sumRole = 0;
-					int sumSystem = 0;
-					
-					Map<String, List<Model>> epcElement = new HashMap<String, List<Model>>();
-					for (Model model : project.getModels().getModel()) {
-						if (model.getModelType().startsWith("EPC")) {
-							if (!epcElement.containsKey(model.getModelType())) {
-								epcElement.put(model.getModelType(), new ArrayList<Model>());
-							} 
-							epcElement.get(model.getModelType()).add(model);
+					for (Diagram diagram : project.getDiagrams().getDiagram()) {
+						if ("EPCDiagram".equals(diagram.getDiagramType())) {
+							DefaultMutableTreeNode diagramNode = new DefaultMutableTreeNode("Diagram");
+							diagramNode.add(new DefaultMutableTreeNode("id = \"" + diagram.getId()+ "\""));
+							diagramNode.add(new DefaultMutableTreeNode("diagramType = \"" + diagram.getDiagramType()+ "\""));
+							diagramNode.add(new DefaultMutableTreeNode("name = \"" + diagram.getName()+ "\""));
+							
+							for (Object object : diagram.getDiagramPropertiesOrHiddenDiagramElementsOrScenarios()) {
+								if (Shapes.class.isInstance(object)) {
+									DefaultMutableTreeNode shapesNode = new DefaultMutableTreeNode("Shapes");
+									Shapes shapes = (Shapes) object;
+									elementShapes = shapes;
+									mapShape = new HashMap<String, Shape>();
+									for (Shape shape : shapes.getShape()) {
+										DefaultMutableTreeNode shapeNode = new DefaultMutableTreeNode("Shape");
+										shapeNode.add(new DefaultMutableTreeNode("id = \"" + shape.getId()+ "\""));
+										shapeNode.add(new DefaultMutableTreeNode("shapeType = \"" + shape.getShapeType()+ "\""));
+										shapeNode.add(new DefaultMutableTreeNode("name = \"" + shape.getName()+ "\""));
+										shapeNode.add(new DefaultMutableTreeNode("height = \"" + shape.getHeight()+ "\""));
+										shapeNode.add(new DefaultMutableTreeNode("width = \"" + shape.getWidth()+ "\""));
+										shapeNode.add(new DefaultMutableTreeNode("x = \"" + shape.getX()+ "\""));
+										shapeNode.add(new DefaultMutableTreeNode("y = \"" + shape.getY()+ "\""));
+										
+										shapesNode.add(shapeNode);
+										mapShape.put(shape.getId(), shape);
+									}
+									diagramNode.add(shapesNode);
+								} else if (Connectors.class.isInstance(object)) {
+									DefaultMutableTreeNode connectorsNode = new DefaultMutableTreeNode("Connectors");
+									Connectors connectors = (Connectors) object;
+									elementConnectors = connectors;
+									for (Connector connector : connectors.getConnector()) {
+										DefaultMutableTreeNode connectorNode = new DefaultMutableTreeNode("Connector");
+										connectorNode.add(new DefaultMutableTreeNode("id = \"" + connector.getId()+ "\""));
+										connectorNode.add(new DefaultMutableTreeNode("connectorStyle = \"" + connector.getConnectorStyle()+ "\""));
+										connectorNode.add(new DefaultMutableTreeNode("shapeType = \"" + connector.getShapeType()+ "\""));
+										connectorNode.add(new DefaultMutableTreeNode("from = \"" + connector.getFrom()+ "\""));
+										connectorNode.add(new DefaultMutableTreeNode("to = \"" + connector.getTo()+ "\""));
+										connectorNode.add(new DefaultMutableTreeNode("height = \"" + connector.getHeight()+ "\""));
+										connectorNode.add(new DefaultMutableTreeNode("width = \"" + connector.getWidth()+ "\""));
+										connectorNode.add(new DefaultMutableTreeNode("x = \"" + connector.getX()+ "\""));
+										connectorNode.add(new DefaultMutableTreeNode("y = \"" + connector.getY()+ "\""));
+										
+										connectorsNode.add(connectorNode);
+									}
+									diagramNode.add(connectorsNode);
+								}
+							}
+							
+							DefaultTreeModel model = (DefaultTreeModel) treeResult.getModel();
+					        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+					        root.removeAllChildren();
+					        model.reload();
+					        model.setRoot(diagramNode);
+
 						}
-						
-						if ("EPCEvent".equals(model.getModelType())) 
-							sumEvent++;
-						else if ("EPCFunction".equals(model.getModelType()))
-							sumFunction++;
-						else if ("EPCProcessPath".equals(model.getModelType()))
-							sumProcessPath++;
-						else if ("EPCAndOperator".equals(model.getModelType()))
-							sumAndOperator++;
-						else if ("EPCOrOperator".equals(model.getModelType()))
-							sumOrOperator++;
-						else if ("EPCXOROperator".equals(model.getModelType()))
-							sumXorOperator++;
-						else if ("EPCInformationResource".equals(model.getModelType()))
-							sumInfoResource++;
-						else if ("EPCOrganizationUnit".equals(model.getModelType()))
-							sumOrgUnit++;
-						else if ("EPCRole".equals(model.getModelType()))
-							sumRole++;
-						else if ("EPCSystem".equals(model.getModelType()))
-							sumSystem++;
+						break;
 					}
-					System.out.println(epcElement.size());
-					
-					elementInfo = "";
-					elementInfo += "#Event: " + sumEvent + "\n";
-					elementInfo += "#Function: " + sumFunction + "\n";
-					elementInfo += "#ProcessPath: " + sumProcessPath + "\n";
-					elementInfo += "#AND: " + sumAndOperator + "\n";
-					elementInfo += "#OR: " + sumOrOperator + "\n";
-					elementInfo += "#XOR: " + sumXorOperator + "\n";
-					elementInfo += "#InformationResource: " + sumInfoResource + "\n";
-					elementInfo += "#OrganizationUnit: " + sumOrgUnit + "\n";
-					elementInfo += "#Role: " + sumRole + "\n";
-					elementInfo += "#System: " + sumSystem + "\n";
-					
 					
 					// Success
 					if (isSuccess) {
@@ -353,7 +385,7 @@ public class EPC2CPN extends JFrame implements ActionListener {
 						lblResult3.setText(transfromStatus);
 					}
 				} catch (Exception e1) {
-					//e1.printStackTrace();
+					e1.printStackTrace();
 					
 					// Error
 					lblResult3.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -365,7 +397,7 @@ public class EPC2CPN extends JFrame implements ActionListener {
 		
 		// Handle "Open CPN Tools" button action.
 		else if (e.getSource() == btnOpenCpnTools) {
-			File file = new File("C:\\Users\\DELL-1809\\Documents\\CPN Project\\Test XOR_New.cpn");
+			File file = new File("C:\\Users\\DELL-1809\\Documents\\CPN Project\\empty.cpn");
 			try {
 				Desktop.getDesktop().open(file);
 			} catch (IOException e1) {
@@ -397,7 +429,27 @@ public class EPC2CPN extends JFrame implements ActionListener {
 		
 		// Handle "View EPC Element" button action.
 		else if (e.getSource() == btnViewEPCElement) {
+			// Find start event
+			if (elementConnectors!=null) {
+				for (Connector i : elementConnectors.getConnector()) {
+					Shape tempFrom = mapShape.get(i.getFrom());
+					boolean isStartNode = true;
+					if ("EPCEvent".equals(tempFrom.getShapeType())) {
+						for (Connector j : elementConnectors.getConnector()) {
+							if (i.getFrom().equalsIgnoreCase(j.getTo())) {
+								isStartNode = false;
+								break;
+							}
+						}
+					} else {
+						isStartNode = false;
+					}
+					System.out.println("Node Id = "+i.getId()+", isStartNode = "+isStartNode);
+				}
+			}
+			
 			JOptionPane.showMessageDialog(frame, elementInfo, "EPC Element", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
+	
 }
