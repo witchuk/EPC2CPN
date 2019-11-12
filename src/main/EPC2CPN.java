@@ -31,7 +31,10 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.io.FileUtils;
 
-import main.model.ExtendedShape;
+import main.contant.Constant;
+import main.model.CPNObject;
+import main.model.EPCElement;
+import main.util.TranformUtils;
 import object.visualparadigm.Connector;
 import object.visualparadigm.Connectors;
 import object.visualparadigm.Diagram;
@@ -55,7 +58,6 @@ import javax.swing.JTree;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
-import javax.swing.JToolBar;
 
 public class EPC2CPN extends JFrame implements ActionListener {
 
@@ -89,12 +91,15 @@ public class EPC2CPN extends JFrame implements ActionListener {
 	
 	private Map<String, Shape> mapShape = null;
 	
+	private List<EPCElement> epcElementList;
+	
 	private static Properties properties;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
 		// Load Configuration
 		try (InputStream input = new FileInputStream("src/resources/config.properties")) {
 			properties = new Properties();
@@ -474,6 +479,49 @@ public class EPC2CPN extends JFrame implements ActionListener {
 							break;
 						}
 						
+						if (elementShapes != null) {
+							epcElementList = new ArrayList<EPCElement>();
+							
+							for (Shape shape : elementShapes.getShape()) {
+								EPCElement element = new EPCElement();
+								element.setShape(shape);
+								
+								int countFrom = 0;
+								int countTo = 0;
+								for (Connector connector : elementConnectors.getConnector()) {
+									if (shape.getId().equalsIgnoreCase(connector.getFrom())) {
+										countFrom++;
+									}
+									if (shape.getId().equalsIgnoreCase(connector.getTo())) {
+										countTo++;
+									}
+								}
+								
+								if (Constant.EPC_SHAPE_TYPE_EVENT.equals(shape.getShapeType())) {	
+									if (countFrom == 0 && countTo > 0) {
+										// Start Event
+										element.setStartNode(true);
+									}
+									
+								} else if (Constant.EPC_SHAPE_TYPE_FUNCTION.equals(shape.getShapeType())) {
+									
+								} else if (Constant.EPC_SHAPE_TYPE_AND.equals(shape.getShapeType())
+										|| Constant.EPC_SHAPE_TYPE_XOR.equals(shape.getShapeType())
+										|| Constant.EPC_SHAPE_TYPE_OR.equals(shape.getShapeType())) {
+									if (countFrom == 1 && countTo == 2) {
+										// Split
+										element.setOperatorType("Split");
+									} else if (countFrom == 2 && countTo == 1) {
+										// Join
+										element.setOperatorType("Join");
+									}
+									
+								}
+								
+								epcElementList.add(element);
+							}
+						}
+						
 						// Success
 						if (isSuccess) {
 							lblResult3.setFont(new Font("Tahoma", Font.BOLD, 11));
@@ -536,7 +584,7 @@ public class EPC2CPN extends JFrame implements ActionListener {
 			Shape temp = new Shape();
 			int initX = 0;
 			int initY = 0;
-			List<ExtendedShape> extendedShapeList = new ArrayList<ExtendedShape>();
+			List<EPCElement> extendedShapeList = new ArrayList<EPCElement>();
 			if (elementConnectors!=null) {
 				for (Connector i : elementConnectors.getConnector()) {
 					Shape tempFrom = mapShape.get(i.getFrom());
@@ -551,7 +599,7 @@ public class EPC2CPN extends JFrame implements ActionListener {
 					} else {
 						isStartNode = false;
 					}
-					ExtendedShape eShape = new ExtendedShape();
+					EPCElement eShape = new EPCElement();
 					eShape.setShape(temp);
 					eShape.setStartNode(isStartNode);
 					extendedShapeList.add(eShape);
@@ -567,17 +615,11 @@ public class EPC2CPN extends JFrame implements ActionListener {
 			
 			// TEST Transform
 			String cpnTemplate = "";
-			String placeTemplate = "";
-			String transTemplate = "";
-			String arcTemplate = "";
 			String placeItem = "";
 			String transItem = "";
 			String arcItem = "";
 			try {
 				cpnTemplate = FileUtils.readFileToString(new File(properties.getProperty("CPN_TEMPLATE_FILE")), Charset.defaultCharset());
-				placeTemplate = FileUtils.readFileToString(new File(properties.getProperty("TEMPLATE_PLACE")), Charset.defaultCharset());
-				transTemplate = FileUtils.readFileToString(new File(properties.getProperty("TEMPLATE_TRANS")), Charset.defaultCharset());
-				arcTemplate = FileUtils.readFileToString(new File(properties.getProperty("TEMPLATE_ARC")), Charset.defaultCharset());
 			} catch (IOException io) {
 				io.printStackTrace();
 			}
@@ -585,53 +627,19 @@ public class EPC2CPN extends JFrame implements ActionListener {
 			if (elementShapes!=null) {
 				for (Shape i : elementShapes.getShape()) {
 					if (Constant.EPC_SHAPE_TYPE_EVENT.equals(i.getShapeType())) {
-						placeItem += placeTemplate;
-						long currentTime = System.currentTimeMillis();
 						int xPoint = initX - i.getX().intValue();
 						int yPoint = initY - i.getY().intValue();
 						
-//						String placeId = "ID" + currentTime + "1";
-						placeItem = placeItem.replaceAll("#PLACE_ID", i.getId())
-								.replaceAll("#PLACE_X", String.valueOf(xPoint))
-								.replaceAll("#PLACE_Y", String.valueOf(yPoint))
-								.replaceAll("#PLACE_TEXT", i.getName())
-								.replaceAll("#PLACE_TYPE_ID", "ID" + currentTime + "2")
-								.replaceAll("#PLACE_TYPE_X", String.valueOf(xPoint + 36))
-								.replaceAll("#PLACE_TYPE_Y", String.valueOf(yPoint - 24))
-								.replaceAll("#PLACE_TYPE_TEXT", "UNIT")
-								.replaceAll("#PLACE_MARK_ID", "ID" + currentTime + "3")
-								.replaceAll("#PLACE_MARK_X", String.valueOf(xPoint + 36))
-								.replaceAll("#PLACE_MARK_Y", String.valueOf(yPoint + 23))
-								.replaceAll("#PLACE_MARK_TEXT", "");
-						
-						
+						CPNObject cpnObject = TranformUtils.generateEventCPNObject(xPoint, yPoint, i.getName());
+						placeItem += TranformUtils.performCPNElemetXMLString(cpnObject, properties);
 						
 					} else if (Constant.EPC_SHAPE_TYPE_FUNCTION.equals(i.getShapeType())) {
-						transItem += transTemplate;
-						long currentTime = System.currentTimeMillis();
 						int xPoint = initX - i.getX().intValue();
 						int yPoint = initY - i.getY().intValue();
 						
-//						String transId = "ID" + currentTime + "1";
-						transItem = transItem.replaceAll("#TRANS_ID", i.getId())
-								.replaceAll("#TRANS_X", String.valueOf(xPoint))
-								.replaceAll("#TRANS_Y", String.valueOf(yPoint))
-								.replaceAll("#TRANS_COND_ID", "ID" + currentTime + "2")
-								.replaceAll("#TRANS_COND_X", String.valueOf(xPoint - 38))
-								.replaceAll("#TRANS_COND_Y", String.valueOf(yPoint + 31))
-								.replaceAll("#TRANS_COND_TEXT", "")
-								.replaceAll("#TRANS_TIME_ID", "ID" + currentTime + "3")
-								.replaceAll("#TRANS_TIME_X", String.valueOf(xPoint + 38))
-								.replaceAll("#TRANS_TIME_Y", String.valueOf(yPoint + 31))
-								.replaceAll("#TRANS_TIME_TEXT", "")
-								.replaceAll("#TRANS_CODE_ID", "ID" + currentTime + "4")
-								.replaceAll("#TRANS_CODE_X", String.valueOf(xPoint + 38))
-								.replaceAll("#TRANS_CODE_Y", String.valueOf(yPoint - 31))
-								.replaceAll("#TRANS_CODE_TEXT", "")
-								.replaceAll("#TRANS_PRIO_ID", "ID" + currentTime + "5")
-								.replaceAll("#TRANS_PRIO_X", String.valueOf(xPoint - 38))
-								.replaceAll("#TRANS_PRIO_Y", String.valueOf(yPoint - 31))
-								.replaceAll("#TRANS_PRIO_TEXT", "");
+						CPNObject cpnObject = TranformUtils.generateFunctionCPNObject(xPoint, yPoint, i.getName());
+						transItem += TranformUtils.performCPNElemetXMLString(cpnObject, properties);
+						
 					} else if (Constant.EPC_SHAPE_TYPE_AND.equals(i.getShapeType())) {
 						
 					} else if (Constant.EPC_SHAPE_TYPE_XOR.equals(i.getShapeType())) {
@@ -646,42 +654,47 @@ public class EPC2CPN extends JFrame implements ActionListener {
 						
 					}
 				}
-				for (Connector j : elementConnectors.getConnector()) {
-					if (Constant.EPC_SHAPE_TYPE_CONTROLFLOW.equals(j.getShapeType())) {
-						
-						Shape shapeFrom = mapShape.get(j.getFrom());
-						Shape shapeTo = mapShape.get(j.getTo());
-						
-						if (shapeFrom!=null && shapeTo!=null) {
-							String arcType = null;
-							String transId = "";
-							String plactId = "";
-							if (Constant.EPC_SHAPE_TYPE_EVENT.equals(shapeFrom.getShapeType()) && Constant.EPC_SHAPE_TYPE_FUNCTION.equals(shapeTo.getShapeType())) {
-								arcType = "PtoT";
-								plactId = shapeFrom.getId();
-								transId = shapeTo.getId();
-							} else if (Constant.EPC_SHAPE_TYPE_FUNCTION.equals(shapeFrom.getShapeType()) && Constant.EPC_SHAPE_TYPE_EVENT.equals(shapeTo.getShapeType())) {
-								arcType = "TtoP";
-								plactId = shapeTo.getId();
-								transId = shapeFrom.getId();
-							}
-							
-							if (arcType != null) {
-								arcItem += arcTemplate;
-								arcItem = arcItem.replaceAll("#ARC_ID", j.getId())
-										.replaceAll("#ARC_TYPE", arcType)
-										.replaceAll("#TRANS_ID", transId)
-										.replaceAll("#PLACE_ID", plactId)
-										.replaceAll("#ARC_ANNO_X", "0.000000")
-										.replaceAll("#ARC_ANNO_Y", "0.000000")
-										.replaceAll("#ARC_ANNO_TEXT", "1`()");
-							}
-						}
-					}
-				}
+//				for (Connector j : elementConnectors.getConnector()) {
+//					if (Constant.EPC_SHAPE_TYPE_CONTROLFLOW.equals(j.getShapeType())) {
+//						
+//						Shape shapeFrom = mapShape.get(j.getFrom());
+//						Shape shapeTo = mapShape.get(j.getTo());
+//						
+//						if (shapeFrom!=null && shapeTo!=null) {
+//							String arcType = null;
+//							String transId = "";
+//							String plactId = "";
+//							if (Constant.EPC_SHAPE_TYPE_EVENT.equals(shapeFrom.getShapeType()) && Constant.EPC_SHAPE_TYPE_FUNCTION.equals(shapeTo.getShapeType())) {
+//								arcType = "PtoT";
+//								plactId = shapeFrom.getId();
+//								transId = shapeTo.getId();
+//							} else if (Constant.EPC_SHAPE_TYPE_FUNCTION.equals(shapeFrom.getShapeType()) && Constant.EPC_SHAPE_TYPE_EVENT.equals(shapeTo.getShapeType())) {
+//								arcType = "TtoP";
+//								plactId = shapeTo.getId();
+//								transId = shapeFrom.getId();
+//							}
+//							
+//							if (arcType != null) {
+//								arcItem += arcTemplate;
+//								arcItem = arcItem.replaceAll("#ARC_ID", j.getId())
+//										.replaceAll("#ARC_TYPE", arcType)
+//										.replaceAll("#TRANS_ID", transId)
+//										.replaceAll("#PLACE_ID", plactId)
+//										.replaceAll("#ARC_ANNO_X", "0.000000")
+//										.replaceAll("#ARC_ANNO_Y", "0.000000")
+//										.replaceAll("#ARC_ANNO_TEXT", "1`()");
+//							}
+//						}
+//					}
+//				}
+				
+//				CPNObject cpnObject = TranformUtils.generateORJoinCPNObject(0, 0, "TEST");
+//				String a1 = TranformUtils.performCPNElemetXMLString(cpnObject, properties);
+//				cpnObject = ConvertUtils.generateANDJoinObject(100, 100, "TEST");
+//				String a2 = ConvertUtils.performCPNElemetXMLString(cpnObject, properties);
 				elementInfo = cpnTemplate.replaceAll("#PLACE_ITEM", placeItem)
 						.replaceAll("#TRANS_ITEM", transItem)
-						.replaceAll("#ARC_ITEM", arcItem);
+						.replaceAll("#ARC_ITEM", "");
 			}
 			
 			JOptionPane.showMessageDialog(frame, elementInfo, "EPC Element", JOptionPane.INFORMATION_MESSAGE);
