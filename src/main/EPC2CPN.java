@@ -32,6 +32,7 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.commons.io.FileUtils;
 
 import main.contant.Constant;
+import main.model.Arc;
 import main.model.CPNObject;
 import main.model.EPCElement;
 import main.util.TranformUtils;
@@ -46,6 +47,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -90,6 +92,7 @@ public class EPC2CPN extends JFrame implements ActionListener {
 	private Connectors elementConnectors = null;
 	
 	private Map<String, Shape> mapShape = null;
+	private Map<String, EPCElement> mapEPCElement = null;
 	
 	private List<EPCElement> epcElementList;
 	
@@ -159,6 +162,7 @@ public class EPC2CPN extends JFrame implements ActionListener {
 		JMenu mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
 		mntmAboutUs = new JMenuItem("About EPC2CPN");
+		mntmAboutUs.addActionListener(this);
 		mnHelp.add(mntmAboutUs);
 		// --------------------------
 		
@@ -267,9 +271,15 @@ public class EPC2CPN extends JFrame implements ActionListener {
 		DefaultTableModel tableModel = new DefaultTableModel();
 		tableModel.addColumn("ID");
 		tableModel.addColumn("Name");
-		tableModel.addColumn("COLSET");
-		tableModel.addColumn("Values");
-		tableResult = new JTable(tableModel);
+		tableModel.addColumn("Type");
+		tableModel.addColumn("Marking");
+		tableResult = new JTable(tableModel) {
+	        private static final long serialVersionUID = 1L;
+	        public boolean isCellEditable(int row, int column) {
+	        	if (column == 3) return true;
+	        	return false;
+	        };
+	    };
 		tableResult.setFillsViewportHeight(true);
 		
 		JScrollPane scrollTable = new JScrollPane();
@@ -345,6 +355,17 @@ public class EPC2CPN extends JFrame implements ActionListener {
 			closeApplication();
 		}
 		
+		// Handle "About EPC2CPN" menu item action.
+		else if (e.getSource() == mntmAboutUs) {
+			try {
+				DialogAboutUs dialog = new DialogAboutUs();
+				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				dialog.setVisible(true);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		
 		// Handle "Reset" menu item action.
 		else if (e.getSource() == mntmReset) {
 			resetResultText();
@@ -355,15 +376,23 @@ public class EPC2CPN extends JFrame implements ActionListener {
 		
 		// Handle "Reset" menu item action.
 		else if (e.getSource() == mntmSetting) {
-			resetResultText();
-			
-			textField.setText("");
-			selectedFile = null;
+			try {
+				String configBrowsePath = properties.getProperty("DEFAULT_BROWSE_PATH");
+				String configSavePath = properties.getProperty("DEFAULT_SAVE_PATH");
+				
+				DialogSetting dialog = new DialogSetting(configBrowsePath, configSavePath, properties);
+				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				dialog.setVisible(true);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 		
 		// Handle "Browse..." button action.
 		else if (e.getSource() == btnBrowse) {
-			JFileChooser fileChooser = new JFileChooser();
+			String configBrowsePath = properties.getProperty("DEFAULT_BROWSE_PATH");
+			
+			JFileChooser fileChooser = new JFileChooser(configBrowsePath);
 			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("XML File (*.xml)", "xml"));
 			fileChooser.setAcceptAllFileFilterUsed(false);
@@ -411,15 +440,13 @@ public class EPC2CPN extends JFrame implements ActionListener {
 						Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 						Project project = (Project) unmarshaller.unmarshal(selectedFile);
 						
+						// Show in Tree Panel
 						for (Diagram diagram : project.getDiagrams().getDiagram()) {
 							if (Constant.EPC_DIAGRAM_TYPE.equals(diagram.getDiagramType())) {
 								DefaultMutableTreeNode diagramNode = new DefaultMutableTreeNode("Diagram");
 								diagramNode.add(new DefaultMutableTreeNode("id = \"" + diagram.getId()+ "\""));
 								diagramNode.add(new DefaultMutableTreeNode("diagramType = \"" + diagram.getDiagramType()+ "\""));
 								diagramNode.add(new DefaultMutableTreeNode("name = \"" + diagram.getName()+ "\""));
-								
-								DefaultTableModel tableModel = (DefaultTableModel) tableResult.getModel();
-								tableModel.setRowCount(0);
 								
 								for (Object object : diagram.getDiagramPropertiesOrHiddenDiagramElementsOrScenarios()) {
 									if (Shapes.class.isInstance(object)) {
@@ -439,11 +466,6 @@ public class EPC2CPN extends JFrame implements ActionListener {
 											
 											shapesNode.add(shapeNode);
 											mapShape.put(shape.getId(), shape);
-											
-											if (Constant.EPC_SHAPE_TYPE_EVENT.equals(shape.getShapeType())) {
-												String[] temp = {shape.getId(), shape.getName(), "UNIT", ""};
-												tableModel.addRow(temp);
-											}
 										}
 										diagramNode.add(shapesNode);
 									} else if (Connectors.class.isInstance(object)) {
@@ -479,46 +501,105 @@ public class EPC2CPN extends JFrame implements ActionListener {
 							break;
 						}
 						
+						// Check each element
+						List<EPCElement> startElement = new ArrayList<EPCElement>(); 
 						if (elementShapes != null) {
+							mapEPCElement = new HashMap<String, EPCElement>();
 							epcElementList = new ArrayList<EPCElement>();
+							
+							DefaultTableModel tableModel = (DefaultTableModel) tableResult.getModel();
+							tableModel.setRowCount(0);
 							
 							for (Shape shape : elementShapes.getShape()) {
 								EPCElement element = new EPCElement();
 								element.setShape(shape);
+								
+								List<String> fromShapeIdList = new ArrayList<String>();
+								List<String> toShapeIdList = new ArrayList<String>();
+								boolean isStartNode = false;
 								
 								int countFrom = 0;
 								int countTo = 0;
 								for (Connector connector : elementConnectors.getConnector()) {
 									if (shape.getId().equalsIgnoreCase(connector.getFrom())) {
 										countFrom++;
+										
+										Shape toShape = mapShape.get(connector.getTo());
+										if (toShape != null) {
+											toShapeIdList.add(toShape.getId());
+										}
 									}
 									if (shape.getId().equalsIgnoreCase(connector.getTo())) {
 										countTo++;
+										
+										Shape fromShape = mapShape.get(connector.getFrom());
+										if (fromShape != null) {
+											fromShapeIdList.add(fromShape.getId());
+										}
+									}
+									
+									// Check event 
+									if (Constant.EPC_SHAPE_TYPE_EVENT.equals(shape.getShapeType())) {
+										if (shape.getId().equalsIgnoreCase(connector.getTo())) {
+											Shape fromShape = mapShape.get(connector.getFrom());
+											if (Constant.EPC_SHAPE_TYPE_EVENT.equals(fromShape.getShapeType())
+													|| Constant.EPC_SHAPE_TYPE_AND.equals(fromShape.getShapeType())
+													|| Constant.EPC_SHAPE_TYPE_XOR.equals(fromShape.getShapeType())
+													|| Constant.EPC_SHAPE_TYPE_OR.equals(fromShape.getShapeType())) {
+												element.setReqDummyTrans(true);
+											}
+										}
 									}
 								}
 								
 								if (Constant.EPC_SHAPE_TYPE_EVENT.equals(shape.getShapeType())) {	
-									if (countFrom == 0 && countTo > 0) {
+									if (countFrom == 1 && countTo == 0) {
 										// Start Event
-										element.setStartNode(true);
+										isStartNode = true;
 									}
+									element.setStartNode(isStartNode);
 									
-								} else if (Constant.EPC_SHAPE_TYPE_FUNCTION.equals(shape.getShapeType())) {
+									// Show initial marking value in table
+									String initMark = isStartNode?"1":"";
+									String[] temp = {shape.getId(), shape.getName(), shape.getShapeType(), initMark};
+									tableModel.addRow(temp);
 									
 								} else if (Constant.EPC_SHAPE_TYPE_AND.equals(shape.getShapeType())
 										|| Constant.EPC_SHAPE_TYPE_XOR.equals(shape.getShapeType())
 										|| Constant.EPC_SHAPE_TYPE_OR.equals(shape.getShapeType())) {
-									if (countFrom == 1 && countTo == 2) {
+									if (countFrom == 2 && countTo == 1) {
 										// Split
 										element.setOperatorType("Split");
-									} else if (countFrom == 2 && countTo == 1) {
+									} else if (countFrom == 1 && countTo == 2) {
 										// Join
 										element.setOperatorType("Join");
 									}
 									
+								} else if (Constant.EPC_SHAPE_TYPE_PROCESSPATH.equals(shape.getShapeType())
+										|| Constant.EPC_SHAPE_TYPE_INFORMATIONRESOURCE.equals(shape.getShapeType())
+										|| Constant.EPC_SHAPE_TYPE_ROLE.equals(shape.getShapeType())
+										|| Constant.EPC_SHAPE_TYPE_SYSTEM.equals(shape.getShapeType())
+										|| Constant.EPC_SHAPE_TYPE_ORGANIZATIONUNIT.equals(shape.getShapeType())) {
+									if (countFrom == 1 && countTo == 0) {
+										// Start Node
+										isStartNode = true;
+									}
+									
+									// Show initial marking value in table
+									String initMark = isStartNode?"1":"";
+									String[] temp = {shape.getId(), shape.getName(), shape.getShapeType(), initMark};
+									tableModel.addRow(temp);
 								}
 								
+								element.setFromShapeId(fromShapeIdList);
+								element.setToShapeId(toShapeIdList);
 								epcElementList.add(element);
+								
+								if (isStartNode) {
+									startElement.add(element);
+								}
+								
+								mapEPCElement.put(element.getShape().getId(), element);
 							}
 						}
 						
@@ -553,7 +634,9 @@ public class EPC2CPN extends JFrame implements ActionListener {
 		
 		// Handle "Generate CPN" button action.
 		else if (e.getSource() == btnGenerateCPN) {
-			JFileChooser fileChooser = new JFileChooser();
+			String configSavePath = properties.getProperty("DEFAULT_SAVE_PATH");
+			
+			JFileChooser fileChooser = new JFileChooser(configSavePath);
 			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("CPN File (*.cpn)", "cpn"));
 			fileChooser.setAcceptAllFileFilterUsed(false);
@@ -580,125 +663,230 @@ public class EPC2CPN extends JFrame implements ActionListener {
 		
 		// Handle "View EPC Element" button action.
 		else if (e.getSource() == btnVerified) {
-			// Find start event
-			Shape temp = new Shape();
+			DefaultTableModel tableModel = (DefaultTableModel) tableResult.getModel();
+			for (int i=0; i<tableModel.getRowCount(); i++) {
+				try {
+					String shapeId = String.valueOf(tableModel.getValueAt(i, 0));
+					String markValue = String.valueOf(tableModel.getValueAt(i, 3));
+					
+					if (markValue!=null && markValue.trim().length()>0) {
+						// Check marking is Integer
+						Integer.parseInt(markValue);
+						
+						mapEPCElement.get(shapeId).setInitMark(markValue);
+					}
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(frame, "Initial marking values failed!", "Failed", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+			
+			
+			// Find initial X, Y
 			int initX = 0;
 			int initY = 0;
-			List<EPCElement> extendedShapeList = new ArrayList<EPCElement>();
-			if (elementConnectors!=null) {
-				for (Connector i : elementConnectors.getConnector()) {
-					Shape tempFrom = mapShape.get(i.getFrom());
-					boolean isStartNode = true;
-					if (Constant.EPC_SHAPE_TYPE_EVENT.equals(tempFrom.getShapeType())) {
-						for (Connector j : elementConnectors.getConnector()) {
-							if (i.getFrom().equalsIgnoreCase(j.getTo())) {
-								isStartNode = false;
-								break;
-							}
-						}
-					} else {
-						isStartNode = false;
-					}
-					EPCElement eShape = new EPCElement();
-					eShape.setShape(temp);
-					eShape.setStartNode(isStartNode);
-					extendedShapeList.add(eShape);
-					
-					System.out.println("Node Id = "+i.getId()+", isStartNode = "+isStartNode);
-					if (isStartNode) {
-						temp = tempFrom;
-						initX = temp.getX().intValue();
-						initY = temp.getY().intValue();
+			if (epcElementList!=null) {
+				for (EPCElement element : epcElementList) {
+					if (element.isStartNode()) {
+						initX = element.getShape().getX().intValue();
+						initY = element.getShape().getY().intValue();
+						break;
 					}
 				}
 			}
 			
-			// TEST Transform
+			// Transform
 			String cpnTemplate = "";
-			String placeItem = "";
-			String transItem = "";
-			String arcItem = "";
+			String transformItem = "";
 			try {
 				cpnTemplate = FileUtils.readFileToString(new File(properties.getProperty("CPN_TEMPLATE_FILE")), Charset.defaultCharset());
 			} catch (IOException io) {
 				io.printStackTrace();
 			}
 			
-			if (elementShapes!=null) {
-				for (Shape i : elementShapes.getShape()) {
+			if (epcElementList!=null) {
+				int countEvent = 0;
+				int countFunction = 0;
+				int countAND = 0;
+				int countXOR = 0;
+				int countOR = 0;
+				int countArtifact = 0;
+				
+				// Transform for each EPC Element
+				for (EPCElement element : epcElementList) {
+					Shape i = element.getShape();
+					int xPoint = i.getX().intValue() - initX;
+					int yPoint = initY - i.getY().intValue();
+					
+					List<String> incomeCPNId = new ArrayList<String>();
+					List<String> outcomeCPNId = new ArrayList<String>();
+					
+					CPNObject cpnObject = null;
 					if (Constant.EPC_SHAPE_TYPE_EVENT.equals(i.getShapeType())) {
-						int xPoint = initX - i.getX().intValue();
-						int yPoint = initY - i.getY().intValue();
+						countEvent++;
+						String name = i.getName() + "_E_" + countEvent;
+						String marking = element.getInitMark();
 						
-						CPNObject cpnObject = TranformUtils.generateEventCPNObject(xPoint, yPoint, i.getName());
-						placeItem += TranformUtils.performCPNElemetXMLString(cpnObject, properties);
-						
+						if (element.isReqDummyTrans()) {
+							cpnObject = TranformUtils.generateEventDummyFunctionCPNObject(xPoint, yPoint, name, marking);
+							incomeCPNId.add(cpnObject.getTransList().get(0).getId());
+						} else {
+							cpnObject = TranformUtils.generateEventCPNObject(xPoint, yPoint, name, marking);
+							incomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
+						}
+						outcomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
 					} else if (Constant.EPC_SHAPE_TYPE_FUNCTION.equals(i.getShapeType())) {
-						int xPoint = initX - i.getX().intValue();
-						int yPoint = initY - i.getY().intValue();
+						countFunction++;
+						String name = i.getName() + "_F_" + countFunction;
 						
-						CPNObject cpnObject = TranformUtils.generateFunctionCPNObject(xPoint, yPoint, i.getName());
-						transItem += TranformUtils.performCPNElemetXMLString(cpnObject, properties);
-						
+						cpnObject = TranformUtils.generateFunctionCPNObject(xPoint, yPoint, name);
+						incomeCPNId.add(cpnObject.getTransList().get(0).getId());
+						outcomeCPNId.add(cpnObject.getTransList().get(0).getId());
 					} else if (Constant.EPC_SHAPE_TYPE_AND.equals(i.getShapeType())) {
+						countAND++;
+						String name = "AND_" + countAND;
 						
+						if ("Split".equals(element.getOperatorType())) {
+							cpnObject = TranformUtils.generateANDSplitCPNObject(xPoint, yPoint, name);
+						
+							incomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
+							outcomeCPNId.add(cpnObject.getPlaceList().get(1).getId());
+							outcomeCPNId.add(cpnObject.getPlaceList().get(2).getId());
+						} else if ("Join".equals(element.getOperatorType())) {
+							cpnObject = TranformUtils.generateANDJoinCPNObject(xPoint, yPoint, name);
+
+							incomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
+							incomeCPNId.add(cpnObject.getPlaceList().get(1).getId());
+							outcomeCPNId.add(cpnObject.getPlaceList().get(2).getId());
+						}
 					} else if (Constant.EPC_SHAPE_TYPE_XOR.equals(i.getShapeType())) {
+						countXOR++;
+						String name = "XOR_" + countXOR;
 						
+						if ("Split".equals(element.getOperatorType())) {
+							cpnObject = TranformUtils.generateXORSplitCPNObject(xPoint, yPoint, name);
+							
+							incomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
+							outcomeCPNId.add(cpnObject.getPlaceList().get(1).getId());
+							outcomeCPNId.add(cpnObject.getPlaceList().get(2).getId());
+						} else if ("Join".equals(element.getOperatorType())) {
+							cpnObject = TranformUtils.generateXORJoinCPNObject(xPoint, yPoint, name);
+
+							incomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
+							incomeCPNId.add(cpnObject.getPlaceList().get(1).getId());
+							outcomeCPNId.add(cpnObject.getPlaceList().get(2).getId());
+						}
 					} else if (Constant.EPC_SHAPE_TYPE_OR.equals(i.getShapeType())) {
+						countOR++;
+						String name = "OR_" + countOR;
 						
+						if ("Split".equals(element.getOperatorType())) {
+							cpnObject = TranformUtils.generateORSplitCPNObject(xPoint, yPoint, name);
+						
+							incomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
+							outcomeCPNId.add(cpnObject.getPlaceList().get(1).getId());
+							outcomeCPNId.add(cpnObject.getPlaceList().get(2).getId());
+						} else if ("Join".equals(element.getOperatorType())) {
+							cpnObject = TranformUtils.generateORJoinCPNObject(xPoint, yPoint, name);
+
+							incomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
+							incomeCPNId.add(cpnObject.getPlaceList().get(1).getId());
+							outcomeCPNId.add(cpnObject.getPlaceList().get(2).getId());
+						}
 					} else if (Constant.EPC_SHAPE_TYPE_PROCESSPATH.equals(i.getShapeType())
 							|| Constant.EPC_SHAPE_TYPE_INFORMATIONRESOURCE.equals(i.getShapeType())
 							|| Constant.EPC_SHAPE_TYPE_ROLE.equals(i.getShapeType())
 							|| Constant.EPC_SHAPE_TYPE_SYSTEM.equals(i.getShapeType())
 							|| Constant.EPC_SHAPE_TYPE_ORGANIZATIONUNIT.equals(i.getShapeType())) {
-						
+						countArtifact++;
+						String name = i.getName() + "_A_" + countArtifact;
+						String marking = element.getInitMark();
+						cpnObject = TranformUtils.generateEventCPNObject(xPoint, yPoint, name, marking);
+						incomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
+						outcomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
 					}
+					element.setIncomeCPNId(incomeCPNId);
+					element.setOutcomeCPNId(outcomeCPNId);
+					element.setCpnObject(cpnObject);
+					
+					transformItem += TranformUtils.performCPNElemetXMLString(cpnObject, properties);
 				}
-//				for (Connector j : elementConnectors.getConnector()) {
-//					if (Constant.EPC_SHAPE_TYPE_CONTROLFLOW.equals(j.getShapeType())) {
-//						
-//						Shape shapeFrom = mapShape.get(j.getFrom());
-//						Shape shapeTo = mapShape.get(j.getTo());
-//						
-//						if (shapeFrom!=null && shapeTo!=null) {
-//							String arcType = null;
-//							String transId = "";
-//							String plactId = "";
-//							if (Constant.EPC_SHAPE_TYPE_EVENT.equals(shapeFrom.getShapeType()) && Constant.EPC_SHAPE_TYPE_FUNCTION.equals(shapeTo.getShapeType())) {
-//								arcType = "PtoT";
-//								plactId = shapeFrom.getId();
-//								transId = shapeTo.getId();
-//							} else if (Constant.EPC_SHAPE_TYPE_FUNCTION.equals(shapeFrom.getShapeType()) && Constant.EPC_SHAPE_TYPE_EVENT.equals(shapeTo.getShapeType())) {
-//								arcType = "TtoP";
-//								plactId = shapeTo.getId();
-//								transId = shapeFrom.getId();
-//							}
-//							
-//							if (arcType != null) {
-//								arcItem += arcTemplate;
-//								arcItem = arcItem.replaceAll("#ARC_ID", j.getId())
-//										.replaceAll("#ARC_TYPE", arcType)
-//										.replaceAll("#TRANS_ID", transId)
-//										.replaceAll("#PLACE_ID", plactId)
-//										.replaceAll("#ARC_ANNO_X", "0.000000")
-//										.replaceAll("#ARC_ANNO_Y", "0.000000")
-//										.replaceAll("#ARC_ANNO_TEXT", "1`()");
-//							}
-//						}
-//					}
-//				}
 				
-//				CPNObject cpnObject = TranformUtils.generateORJoinCPNObject(0, 0, "TEST");
-//				String a1 = TranformUtils.performCPNElemetXMLString(cpnObject, properties);
-//				cpnObject = ConvertUtils.generateANDJoinObject(100, 100, "TEST");
-//				String a2 = ConvertUtils.performCPNElemetXMLString(cpnObject, properties);
-				elementInfo = cpnTemplate.replaceAll("#PLACE_ITEM", placeItem)
-						.replaceAll("#TRANS_ITEM", transItem)
-						.replaceAll("#ARC_ITEM", "");
+				// Create arc for connect between each element
+				CPNObject tempObject = new CPNObject();
+				List<Arc> arcList = new ArrayList<Arc>();
+				if (elementConnectors != null && elementConnectors.getConnector() != null) {
+					for (Connector connector : elementConnectors.getConnector()) {
+						EPCElement fromElement = mapEPCElement.get(connector.getFrom());
+						EPCElement toElement = mapEPCElement.get(connector.getTo());
+						
+						String arcType = "";
+						String transId = "";
+						String placeId = "";
+						if (Constant.EPC_SHAPE_TYPE_FUNCTION.equals(fromElement.getShape().getShapeType())) {
+							arcType = Constant.CPN_ARC_TYPE_TTOP;
+							
+							if (Constant.EPC_SHAPE_TYPE_AND.equals(toElement.getShape().getShapeType())
+									|| Constant.EPC_SHAPE_TYPE_XOR.equals(toElement.getShape().getShapeType())
+									|| Constant.EPC_SHAPE_TYPE_OR.equals(toElement.getShape().getShapeType())) {
+								if ("Split".equals(toElement.getOperatorType())) {
+									placeId = toElement.getIncomeCPNId().get(0);
+								} else if ("Join".equals(toElement.getOperatorType())) {
+									if (fromElement.getShape().getX().intValue() <= toElement.getShape().getX().intValue()) {
+										placeId = toElement.getIncomeCPNId().get(0);
+									} else if (fromElement.getShape().getX().intValue() > toElement.getShape().getX().intValue()) {
+										placeId = toElement.getIncomeCPNId().get(1);
+									}
+								}
+							} else {
+								placeId = toElement.getIncomeCPNId().get(0);
+							}
+							transId = fromElement.getOutcomeCPNId().get(0);
+							
+							arcList.add(TranformUtils.generateArcObject(0, 0, arcType, transId, placeId, "1`()"));
+						} else if (Constant.EPC_SHAPE_TYPE_EVENT.equals(fromElement.getShape().getShapeType())) {
+							arcType = Constant.CPN_ARC_TYPE_PTOT;
+							
+							placeId = fromElement.getOutcomeCPNId().get(0);
+							transId = toElement.getIncomeCPNId().get(0);
+							arcList.add(TranformUtils.generateArcObject(0, 0, arcType, transId, placeId, "1`()"));
+						} else if (Constant.EPC_SHAPE_TYPE_AND.equals(fromElement.getShape().getShapeType())
+								|| Constant.EPC_SHAPE_TYPE_XOR.equals(fromElement.getShape().getShapeType())
+								|| Constant.EPC_SHAPE_TYPE_OR.equals(fromElement.getShape().getShapeType())) {
+							arcType = Constant.CPN_ARC_TYPE_PTOT;
+							
+							if ("Split".equals(fromElement.getOperatorType())) {
+								if (fromElement.getShape().getX().intValue() > toElement.getShape().getX().intValue()) {
+									placeId = fromElement.getOutcomeCPNId().get(0);
+								} else if (fromElement.getShape().getX().intValue() <= toElement.getShape().getX().intValue()) {
+									placeId = fromElement.getOutcomeCPNId().get(1);
+								}
+								transId = toElement.getIncomeCPNId().get(0);
+							} else if ("Join".equals(fromElement.getOperatorType())) {
+								placeId = fromElement.getOutcomeCPNId().get(0);
+								transId = toElement.getIncomeCPNId().get(0);
+							}
+							arcList.add(TranformUtils.generateArcObject(0, 0, arcType, transId, placeId, "1`()"));
+						} else if (Constant.EPC_SHAPE_TYPE_PROCESSPATH.equals(fromElement.getShape().getShapeType())
+								|| Constant.EPC_SHAPE_TYPE_INFORMATIONRESOURCE.equals(fromElement.getShape().getShapeType())
+								|| Constant.EPC_SHAPE_TYPE_ROLE.equals(fromElement.getShape().getShapeType())
+								|| Constant.EPC_SHAPE_TYPE_SYSTEM.equals(fromElement.getShape().getShapeType())
+								|| Constant.EPC_SHAPE_TYPE_ORGANIZATIONUNIT.equals(fromElement.getShape().getShapeType())) {
+							arcType = Constant.CPN_ARC_TYPE_PTOT;
+							
+							placeId = fromElement.getOutcomeCPNId().get(0);
+							transId = toElement.getIncomeCPNId().get(0);
+							arcList.add(TranformUtils.generateArcObject(0, 0, arcType, transId, placeId, "1`()"));
+						}
+					}
+					tempObject.setArcList(arcList);
+					transformItem += TranformUtils.performCPNElemetXMLString(tempObject, properties);
+				}
+				
+				elementInfo = cpnTemplate.replaceAll("#TRANSFORM_ITEM", transformItem);
 			}
 			
-			JOptionPane.showMessageDialog(frame, elementInfo, "EPC Element", JOptionPane.INFORMATION_MESSAGE);
-			
+			JOptionPane.showMessageDialog(frame, "Confirm marking.", "EPC Element", JOptionPane.INFORMATION_MESSAGE);
 			btnGenerateCPN.setEnabled(true);
 		}
 	}

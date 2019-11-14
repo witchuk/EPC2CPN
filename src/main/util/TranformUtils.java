@@ -71,7 +71,7 @@ public class TranformUtils {
 		return trans;
 	}
 	
-	private static Arc generateArcObject(int x, int y, String arcType, String transId, String placeId, String text) {
+	public static Arc generateArcObject(int x, int y, String arcType, String transId, String placeId, String text) {
 		String uniqueId = generateUniqueId();
 		
 		Arc arc = new Arc();
@@ -84,12 +84,29 @@ public class TranformUtils {
 		return arc;
 	}
 	
-	public static CPNObject generateEventCPNObject(int initX, int initY, String text) {
+	public static CPNObject generateEventCPNObject(int initX, int initY, String text, String marking) {
 		List<Place> placeList = new ArrayList<Place>();
-		placeList.add(generatePlaceObject(initX, initY, text, Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX, initY, text, Constant.CPN_COLSET_UNIT, marking));
 		
 		CPNObject cpnObject = new CPNObject();
 		cpnObject.setPlaceList(placeList);
+		return cpnObject;
+	}
+	
+	public static CPNObject generateEventDummyFunctionCPNObject(int initX, int initY, String text, String marking) {
+		List<Place> placeList = new ArrayList<Place>();
+		placeList.add(generatePlaceObject(initX, initY, text, Constant.CPN_COLSET_UNIT, marking));
+		
+		List<Trans> transList = new ArrayList<Trans>();
+		transList.add(generateTransObject(initX, initY + 77, ""));
+		
+		List<Arc> arcList = new ArrayList<Arc>();
+		arcList.add(generateArcObject(initX + 18, initY + 38, Constant.CPN_ARC_TYPE_TTOP, transList.get(0).getId(), placeList.get(0).getId(), "1`()"));
+		
+		CPNObject cpnObject = new CPNObject();
+		cpnObject.setPlaceList(placeList);
+		cpnObject.setTransList(transList);
+		cpnObject.setArcList(arcList);
 		return cpnObject;
 	}
 	
@@ -155,10 +172,10 @@ public class TranformUtils {
 		transList.add(generateTransObject(initX + 52, initY, text + "_2"));
 		
 		List<Arc> arcList = new ArrayList<Arc>();
-		arcList.add(generateArcObject(initX - 9, initY + 32, Constant.CPN_ARC_TYPE_PTOT, transList.get(0).getId(), placeList.get(0).getId(), "1`1"));
-		arcList.add(generateArcObject(initX + 42, initY + 53, Constant.CPN_ARC_TYPE_PTOT, transList.get(1).getId(), placeList.get(0).getId(), "1`1"));
-		arcList.add(generateArcObject(initX - 34, initY - 43, Constant.CPN_ARC_TYPE_TTOP, transList.get(0).getId(), placeList.get(1).getId(), "1`1"));
-		arcList.add(generateArcObject(initX + 70, initY - 43, Constant.CPN_ARC_TYPE_TTOP, transList.get(1).getId(), placeList.get(2).getId(), "1`1"));
+		arcList.add(generateArcObject(initX - 9, initY + 32, Constant.CPN_ARC_TYPE_PTOT, transList.get(0).getId(), placeList.get(0).getId(), "1`()"));
+		arcList.add(generateArcObject(initX + 42, initY + 53, Constant.CPN_ARC_TYPE_PTOT, transList.get(1).getId(), placeList.get(0).getId(), "1`()"));
+		arcList.add(generateArcObject(initX - 34, initY - 43, Constant.CPN_ARC_TYPE_TTOP, transList.get(0).getId(), placeList.get(1).getId(), "1`()"));
+		arcList.add(generateArcObject(initX + 70, initY - 43, Constant.CPN_ARC_TYPE_TTOP, transList.get(1).getId(), placeList.get(2).getId(), "1`()"));
 		
 		CPNObject cpnObject = new CPNObject();
 		cpnObject.setPlaceList(placeList);
@@ -194,7 +211,7 @@ public class TranformUtils {
 	
 	public static CPNObject generateORSplitCPNObject(int initX, int initY, String text) {
 		List<Place> placeList = new ArrayList<Place>();
-		placeList.add(generatePlaceObject(initX, initY + 84, "", Constant.CPN_COLSET_UNIT, "1"));
+		placeList.add(generatePlaceObject(initX, initY + 84, "", Constant.CPN_COLSET_UNIT, ""));
 		placeList.add(generatePlaceObject(initX - 52, initY - 84, "", Constant.CPN_COLSET_UNIT, ""));
 		placeList.add(generatePlaceObject(initX + 52, initY - 84, "", Constant.CPN_COLSET_UNIT, ""));
 		
@@ -238,8 +255,8 @@ public class TranformUtils {
 		arcList.add(generateArcObject(initX - 38, initY - 30, Constant.CPN_ARC_TYPE_TTOP, transList.get(0).getId(), placeList.get(2).getId(), "1`()"));
 		arcList.add(generateArcObject(initX + 18, initY - 42, Constant.CPN_ARC_TYPE_TTOP, transList.get(1).getId(), placeList.get(2).getId(), "1`()"));
 		arcList.add(generateArcObject(initX + 38, initY - 30, Constant.CPN_ARC_TYPE_TTOP, transList.get(2).getId(), placeList.get(2).getId(), "1`()"));
-		arcList.add(generateArcObject(initX + 31, initY + 59, Constant.CPN_ARC_TYPE_INHIBITOR, transList.get(2).getId(), placeList.get(0).getId(), "1"));
-		arcList.add(generateArcObject(initX - 31, initY + 59, Constant.CPN_ARC_TYPE_INHIBITOR, transList.get(0).getId(), placeList.get(1).getId(), "2"));
+		arcList.add(generateArcObject(initX + 31, initY + 59, Constant.CPN_ARC_TYPE_INHIBITOR, transList.get(2).getId(), placeList.get(0).getId(), "1`()"));
+		arcList.add(generateArcObject(initX - 31, initY + 59, Constant.CPN_ARC_TYPE_INHIBITOR, transList.get(0).getId(), placeList.get(1).getId(), "1`()"));
 		
 		CPNObject cpnObject = new CPNObject();
 		cpnObject.setPlaceList(placeList);
