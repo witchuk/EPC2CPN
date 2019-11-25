@@ -16,6 +16,7 @@ import main.model.CPNObject;
 import main.model.CommonField;
 import main.model.Place;
 import main.model.Trans;
+import main.model.Variable;
 import object.visualparadigm.Shape;
 
 public class TranformUtils {
@@ -84,9 +85,20 @@ public class TranformUtils {
 		return arc;
 	}
 	
-	public static CPNObject generateEventCPNObject(int initX, int initY, String text, String marking) {
+	public static Variable generateVariableObject(String type, String name) {
+		String uniqueId = generateUniqueId();
+		
+		Variable var = new Variable();
+		var.setId(uniqueId);
+		var.setType(type);
+		var.setName(name);
+		
+		return var;
+	}
+	
+	public static CPNObject generateEventCPNObject(int initX, int initY, String text, String marking, String colset) {
 		List<Place> placeList = new ArrayList<Place>();
-		placeList.add(generatePlaceObject(initX, initY, text, Constant.CPN_COLSET_UNIT, marking));
+		placeList.add(generatePlaceObject(initX, initY, text, colset, marking));
 		
 		CPNObject cpnObject = new CPNObject();
 		cpnObject.setPlaceList(placeList);
@@ -98,7 +110,7 @@ public class TranformUtils {
 		placeList.add(generatePlaceObject(initX, initY, text, Constant.CPN_COLSET_UNIT, marking));
 		
 		List<Trans> transList = new ArrayList<Trans>();
-		transList.add(generateTransObject(initX, initY + 77, ""));
+		transList.add(generateTransObject(initX, initY + 77, text + "_D1"));
 		
 		List<Arc> arcList = new ArrayList<Arc>();
 		arcList.add(generateArcObject(initX + 18, initY + 38, Constant.CPN_ARC_TYPE_TTOP, transList.get(0).getId(), placeList.get(0).getId(), "1`()"));
@@ -121,9 +133,9 @@ public class TranformUtils {
 	
 	public static CPNObject generateANDSplitCPNObject(int initX, int initY, String text) {
 		List<Place> placeList = new ArrayList<Place>();
-		placeList.add(generatePlaceObject(initX, initY + 84, "", Constant.CPN_COLSET_UNIT, ""));
-		placeList.add(generatePlaceObject(initX - 52, initY - 84, "", Constant.CPN_COLSET_UNIT, ""));
-		placeList.add(generatePlaceObject(initX + 52, initY - 84, "", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX, initY + 84, text + "_D1", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX - 52, initY - 84, text + "_D2", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX + 52, initY - 84, text + "_D3", Constant.CPN_COLSET_UNIT, ""));
 		
 		List<Trans> transList = new ArrayList<Trans>();
 		transList.add(generateTransObject(initX, initY, text));
@@ -142,9 +154,9 @@ public class TranformUtils {
 	
 	public static CPNObject generateANDJoinCPNObject(int initX, int initY, String text) {
 		List<Place> placeList = new ArrayList<Place>();
-		placeList.add(generatePlaceObject(initX - 52, initY + 84, "", Constant.CPN_COLSET_UNIT, ""));
-		placeList.add(generatePlaceObject(initX + 52, initY + 84, "", Constant.CPN_COLSET_UNIT, ""));
-		placeList.add(generatePlaceObject(initX, initY - 84, "", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX - 52, initY + 84, text + "_D1", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX + 52, initY + 84, text + "_D2", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX, initY - 84, text + "_D3", Constant.CPN_COLSET_UNIT, ""));
 		
 		List<Trans> transList = new ArrayList<Trans>();
 		transList.add(generateTransObject(initX, initY, text));
@@ -161,11 +173,32 @@ public class TranformUtils {
 		return cpnObject;
 	}
 	
+	public static CPNObject generateXORSplitWithConditionCPNObject(int initX, int initY, String text, String colset, String condition0, String condition1, String condition2) {
+		List<Place> placeList = new ArrayList<Place>();
+		placeList.add(generatePlaceObject(initX, initY + 84, text + "_D1", colset, ""));
+		placeList.add(generatePlaceObject(initX - 52, initY - 84, text + "_D2", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX + 52, initY - 84, text + "_D3", Constant.CPN_COLSET_UNIT, ""));
+		
+		List<Trans> transList = new ArrayList<Trans>();
+		transList.add(generateTransObject(initX, initY, text));
+		
+		List<Arc> arcList = new ArrayList<Arc>();
+		arcList.add(generateArcObject(initX + 18, initY + 42, Constant.CPN_ARC_TYPE_PTOT, transList.get(0).getId(), placeList.get(0).getId(), condition0));
+		arcList.add(generateArcObject(initX - 10, initY - 53, Constant.CPN_ARC_TYPE_TTOP, transList.get(0).getId(), placeList.get(1).getId(), condition1));
+		arcList.add(generateArcObject(initX + 43, initY - 32, Constant.CPN_ARC_TYPE_TTOP, transList.get(0).getId(), placeList.get(2).getId(), condition2));
+		
+		CPNObject cpnObject = new CPNObject();
+		cpnObject.setPlaceList(placeList);
+		cpnObject.setTransList(transList);
+		cpnObject.setArcList(arcList);
+		return cpnObject;
+	}
+	
 	public static CPNObject generateXORSplitCPNObject(int initX, int initY, String text) {
 		List<Place> placeList = new ArrayList<Place>();
-		placeList.add(generatePlaceObject(initX, initY + 84, "", Constant.CPN_COLSET_UNIT, ""));
-		placeList.add(generatePlaceObject(initX - 52, initY - 84, "", Constant.CPN_COLSET_UNIT, ""));
-		placeList.add(generatePlaceObject(initX + 52, initY - 84, "", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX, initY + 84, text + "_D1", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX - 52, initY - 84, text + "_D2", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX + 52, initY - 84, text + "_D3", Constant.CPN_COLSET_UNIT, ""));
 		
 		List<Trans> transList = new ArrayList<Trans>();
 		transList.add(generateTransObject(initX - 52, initY, text + "_1"));
@@ -186,9 +219,9 @@ public class TranformUtils {
 	
 	public static CPNObject generateXORJoinCPNObject(int initX, int initY, String text) {
 		List<Place> placeList = new ArrayList<Place>();
-		placeList.add(generatePlaceObject(initX - 52, initY + 84, "", Constant.CPN_COLSET_UNIT, ""));
-		placeList.add(generatePlaceObject(initX + 52, initY + 84, "", Constant.CPN_COLSET_UNIT, ""));
-		placeList.add(generatePlaceObject(initX, initY - 84, "", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX - 52, initY + 84, text + "_D1", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX + 52, initY + 84, text + "_D2", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX, initY - 84, text + "_D3", Constant.CPN_COLSET_UNIT, ""));
 		
 		List<Trans> transList = new ArrayList<Trans>();
 		transList.add(generateTransObject(initX - 52, initY, text + "_1"));
@@ -211,9 +244,9 @@ public class TranformUtils {
 	
 	public static CPNObject generateORSplitCPNObject(int initX, int initY, String text) {
 		List<Place> placeList = new ArrayList<Place>();
-		placeList.add(generatePlaceObject(initX, initY + 84, "", Constant.CPN_COLSET_UNIT, ""));
-		placeList.add(generatePlaceObject(initX - 52, initY - 84, "", Constant.CPN_COLSET_UNIT, ""));
-		placeList.add(generatePlaceObject(initX + 52, initY - 84, "", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX, initY + 84, text + "_D1", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX - 52, initY - 84, text + "_D2", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX + 52, initY - 84, text + "_D3", Constant.CPN_COLSET_UNIT, ""));
 		
 		List<Trans> transList = new ArrayList<Trans>();
 		transList.add(generateTransObject(initX - 104, initY, text + "_1"));
@@ -238,9 +271,9 @@ public class TranformUtils {
 	
 	public static CPNObject generateORJoinCPNObject(int initX, int initY, String text) {
 		List<Place> placeList = new ArrayList<Place>();
-		placeList.add(generatePlaceObject(initX - 52, initY + 84, "", Constant.CPN_COLSET_UNIT, ""));
-		placeList.add(generatePlaceObject(initX + 52, initY + 84, "", Constant.CPN_COLSET_UNIT, ""));
-		placeList.add(generatePlaceObject(initX, initY - 84, "", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX - 52, initY + 84, text + "_D1", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX + 52, initY + 84, text + "_D2", Constant.CPN_COLSET_UNIT, ""));
+		placeList.add(generatePlaceObject(initX, initY - 84, text + "_D3", Constant.CPN_COLSET_UNIT, ""));
 		
 		List<Trans> transList = new ArrayList<Trans>();
 		transList.add(generateTransObject(initX - 104, initY, text + "_1"));
@@ -339,6 +372,36 @@ public class TranformUtils {
 			
 		}
 		return result;
+	}
+	
+	public static String performCPNVariableXMLString(Variable variable, Properties properties) {
+		String result = "";
+		if (variable != null) {
+			
+			String variableTemplate = "";
+			try {
+				variableTemplate = FileUtils.readFileToString(new File(properties.getProperty("TEMPLATE_VARIABLE")), Charset.defaultCharset());
+			} catch (IOException io) {
+				io.printStackTrace();
+			}
+			
+			// perform Variable
+			result += variableTemplate.replaceAll("#VAR_ID", variable.getId())
+					.replaceAll("#VAR_TYPE", variable.getType())
+					.replaceAll("#VAR_NAME", variable.getName());
+			
+		}
+		return result;
+	}
+	
+	public static String performCPNMLConditionString(String condition) {
+		if (condition.contains("=="))
+			condition = condition.replaceAll("==", "=");
+		else if (condition.contains("!="))
+			condition = condition.replaceAll("!=", "&lt;&gt;");
+		else 
+			condition = condition.replaceAll("<", "&lt;").replaceAll(">", "&gt;");condition = condition.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+		return "if " + condition + " then 1`() else empty";
 	}
 	
 }

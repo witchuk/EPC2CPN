@@ -6,6 +6,7 @@ public class CPNObject {
 	private List<Place> placeList;
 	private List<Trans> transList;
 	private List<Arc> arcList;
+	private Variable variable;
 	
 	public List<Place> getPlaceList() {
 		return placeList;
@@ -24,6 +25,12 @@ public class CPNObject {
 	}
 	public void setArcList(List<Arc> arcList) {
 		this.arcList = arcList;
+	}
+	public Variable getVariable() {
+		return variable;
+	}
+	public void setVariable(Variable variable) {
+		this.variable = variable;
 	}
 	
 }

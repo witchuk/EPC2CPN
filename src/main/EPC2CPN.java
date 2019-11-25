@@ -35,6 +35,7 @@ import main.contant.Constant;
 import main.model.Arc;
 import main.model.CPNObject;
 import main.model.EPCElement;
+import main.model.Variable;
 import main.util.TranformUtils;
 import object.visualparadigm.Connector;
 import object.visualparadigm.Connectors;
@@ -91,6 +92,7 @@ public class EPC2CPN extends JFrame implements ActionListener {
 	private Shapes elementShapes = null;
 	private Connectors elementConnectors = null;
 	
+	private Map<String, String> mapVariable = null;
 	private Map<String, Shape> mapShape = null;
 	private Map<String, EPCElement> mapEPCElement = null;
 	
@@ -272,11 +274,12 @@ public class EPC2CPN extends JFrame implements ActionListener {
 		tableModel.addColumn("ID");
 		tableModel.addColumn("Name");
 		tableModel.addColumn("Type");
+		tableModel.addColumn("Colset");
 		tableModel.addColumn("Marking");
 		tableResult = new JTable(tableModel) {
 	        private static final long serialVersionUID = 1L;
 	        public boolean isCellEditable(int row, int column) {
-	        	if (column == 3) return true;
+	        	if (column == 4) return true;
 	        	return false;
 	        };
 	    };
@@ -504,6 +507,7 @@ public class EPC2CPN extends JFrame implements ActionListener {
 						// Check each element
 						List<EPCElement> startElement = new ArrayList<EPCElement>(); 
 						if (elementShapes != null) {
+							mapVariable = new HashMap<String, String>();
 							mapEPCElement = new HashMap<String, EPCElement>();
 							epcElementList = new ArrayList<EPCElement>();
 							
@@ -561,7 +565,7 @@ public class EPC2CPN extends JFrame implements ActionListener {
 									
 									// Show initial marking value in table
 									String initMark = isStartNode?"1":"";
-									String[] temp = {shape.getId(), shape.getName(), shape.getShapeType(), initMark};
+									String[] temp = {shape.getId(), shape.getName(), shape.getShapeType(), Constant.CPN_COLSET_UNIT, initMark};
 									tableModel.addRow(temp);
 									
 								} else if (Constant.EPC_SHAPE_TYPE_AND.equals(shape.getShapeType())
@@ -574,7 +578,7 @@ public class EPC2CPN extends JFrame implements ActionListener {
 										// Join
 										element.setOperatorType("Join");
 									}
-									
+								
 								} else if (Constant.EPC_SHAPE_TYPE_PROCESSPATH.equals(shape.getShapeType())
 										|| Constant.EPC_SHAPE_TYPE_INFORMATIONRESOURCE.equals(shape.getShapeType())
 										|| Constant.EPC_SHAPE_TYPE_ROLE.equals(shape.getShapeType())
@@ -585,9 +589,67 @@ public class EPC2CPN extends JFrame implements ActionListener {
 										isStartNode = true;
 									}
 									
-									// Show initial marking value in table
+									String colset = Constant.CPN_COLSET_UNIT;
 									String initMark = isStartNode?"1":"";
-									String[] temp = {shape.getId(), shape.getName(), shape.getShapeType(), initMark};
+									
+									try{
+										String[] shapeName = null;
+										
+										if (Constant.EPC_SHAPE_TYPE_ORGANIZATIONUNIT.equals(shape.getShapeType())){
+											shapeName = new String[3];
+											shapeName[0] = Constant.CPN_COLSET_STRING;
+											shapeName[1] = "orgUnit";
+											shapeName[2] = shape.getName();
+											
+											colset = shapeName[0];
+											initMark = shapeName[2];
+											
+										} else if (Constant.EPC_SHAPE_TYPE_ROLE.equals(shape.getShapeType())) {
+											shapeName = new String[3];
+											shapeName[0] = Constant.CPN_COLSET_STRING;
+											shapeName[1] = "role";
+											shapeName[2] = shape.getName();
+										
+											colset = shapeName[0];
+											initMark = shapeName[2];
+											
+										} else if (Constant.EPC_SHAPE_TYPE_SYSTEM.equals(shape.getShapeType())) {
+											shapeName = new String[3];
+											shapeName[0] = Constant.CPN_COLSET_STRING;
+											shapeName[1] = "system";
+											shapeName[2] = shape.getName();
+											
+											colset = shapeName[0];
+											initMark = shapeName[2];
+											
+										} else if (Constant.EPC_SHAPE_TYPE_INFORMATIONRESOURCE.equals(shape.getShapeType())) {
+											shapeName = shape.getName().split("\\|");
+											if (shapeName!=null && shapeName.length == 3) {
+												colset = shapeName[0];
+												initMark = shapeName[2];
+											} else {
+												shapeName = new String[3];
+												shapeName[0] = Constant.CPN_COLSET_STRING;
+												shapeName[1] = "infoResource";
+												shapeName[2] = shape.getName();
+												
+												colset = shapeName[0];
+												initMark = shapeName[2];
+											}
+										}
+										
+										if (shapeName!=null && shapeName.length == 3) {
+											if (!mapVariable.containsKey(shapeName[1])) {
+												mapVariable.put(shapeName[1], shapeName[0]);
+											}
+										}
+									} catch (Exception ex) {
+										colset = Constant.CPN_COLSET_UNIT;
+										initMark = isStartNode?"1":"";
+									}
+									
+									// Show initial marking value in table
+									String[] temp = {shape.getId(), shape.getName(), shape.getShapeType(), colset, initMark};
 									tableModel.addRow(temp);
 								}
 								
@@ -667,11 +729,16 @@ public class EPC2CPN extends JFrame implements ActionListener {
 			for (int i=0; i<tableModel.getRowCount(); i++) {
 				try {
 					String shapeId = String.valueOf(tableModel.getValueAt(i, 0));
-					String markValue = String.valueOf(tableModel.getValueAt(i, 3));
+					String colset = String.valueOf(tableModel.getValueAt(i, 3));
+					String markValue = String.valueOf(tableModel.getValueAt(i, 4));
 					
 					if (markValue!=null && markValue.trim().length()>0) {
-						// Check marking is Integer
-						Integer.parseInt(markValue);
+						// Check marking
+						if (Constant.CPN_COLSET_UNIT.equals(colset) || Constant.CPN_COLSET_INT.equals(colset)) {
+							Integer.parseInt(markValue);
+						} else if (Constant.CPN_COLSET_BOOL.equals(colset)) {
+							Boolean.parseBoolean(markValue);
+						}
 						
 						mapEPCElement.get(shapeId).setInitMark(markValue);
 					}
@@ -697,6 +764,7 @@ public class EPC2CPN extends JFrame implements ActionListener {
 			
 			// Transform
 			String cpnTemplate = "";
+			String transformVariable = "";
 			String transformItem = "";
 			try {
 				cpnTemplate = FileUtils.readFileToString(new File(properties.getProperty("CPN_TEMPLATE_FILE")), Charset.defaultCharset());
@@ -711,6 +779,12 @@ public class EPC2CPN extends JFrame implements ActionListener {
 				int countXOR = 0;
 				int countOR = 0;
 				int countArtifact = 0;
+				
+				// Transform Variable
+				for (Map.Entry<String, String> me : mapVariable.entrySet()) {
+					Variable var = TranformUtils.generateVariableObject(me.getValue(), me.getKey());
+					transformVariable += TranformUtils.performCPNVariableXMLString(var, properties);
+				}
 				
 				// Transform for each EPC Element
 				for (EPCElement element : epcElementList) {
@@ -731,7 +805,7 @@ public class EPC2CPN extends JFrame implements ActionListener {
 							cpnObject = TranformUtils.generateEventDummyFunctionCPNObject(xPoint, yPoint, name, marking);
 							incomeCPNId.add(cpnObject.getTransList().get(0).getId());
 						} else {
-							cpnObject = TranformUtils.generateEventCPNObject(xPoint, yPoint, name, marking);
+							cpnObject = TranformUtils.generateEventCPNObject(xPoint, yPoint, name, marking, Constant.CPN_COLSET_UNIT);
 							incomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
 						}
 						outcomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
@@ -764,7 +838,41 @@ public class EPC2CPN extends JFrame implements ActionListener {
 						String name = "XOR_" + countXOR;
 						
 						if ("Split".equals(element.getOperatorType())) {
-							cpnObject = TranformUtils.generateXORSplitCPNObject(xPoint, yPoint, name);
+							String colset = Constant.CPN_COLSET_UNIT;
+							Shape fromShape = mapShape.get(element.getFromShapeId().get(0));
+							Shape toShape1 = mapShape.get(element.getToShapeId().get(0));
+							Shape toShape2 = mapShape.get(element.getToShapeId().get(1));
+							String condition0 = "";
+							String condition1 = "";
+							String condition2 = "";
+							if (elementConnectors != null && elementConnectors.getConnector() != null) {
+								for (Connector connector : elementConnectors.getConnector()) {
+									String conName = connector.getName();
+									if (conName!=null && !conName.isEmpty()) {
+										if (connector.getFrom().equals(fromShape.getId()) && connector.getTo().equals(i.getId())) {
+											colset = mapVariable.get(conName);
+											condition0 = conName;
+										} else if (connector.getFrom().equals(i.getId()) && connector.getTo().equals(toShape1.getId())) {
+											if (toShape1.getX().intValue() <= i.getX().intValue()) {
+												condition1 = TranformUtils.performCPNMLConditionString(conName);
+											} else {
+												condition2 = TranformUtils.performCPNMLConditionString(conName);
+											}
+										} else if (connector.getFrom().equals(i.getId()) && connector.getTo().equals(toShape2.getId())) {
+											if (toShape2.getX().intValue() <= i.getX().intValue()) {
+												condition1 = TranformUtils.performCPNMLConditionString(conName);
+											} else {
+												condition2 = TranformUtils.performCPNMLConditionString(conName);
+											}
+										}
+									}
+								}
+							}
+							if (condition0.isEmpty() && condition1.isEmpty() && condition2.isEmpty()) {
+								cpnObject = TranformUtils.generateXORSplitCPNObject(xPoint, yPoint, name);
+							} else {
+								cpnObject = TranformUtils.generateXORSplitWithConditionCPNObject(xPoint, yPoint, name, colset, condition0, condition1, condition2);	
+							}
 							
 							incomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
 							outcomeCPNId.add(cpnObject.getPlaceList().get(1).getId());
@@ -781,8 +889,42 @@ public class EPC2CPN extends JFrame implements ActionListener {
 						String name = "OR_" + countOR;
 						
 						if ("Split".equals(element.getOperatorType())) {
-							cpnObject = TranformUtils.generateORSplitCPNObject(xPoint, yPoint, name);
-						
+							String colset = Constant.CPN_COLSET_UNIT;
+							Shape fromShape = mapShape.get(element.getFromShapeId().get(0));
+							Shape toShape1 = mapShape.get(element.getToShapeId().get(0));
+							Shape toShape2 = mapShape.get(element.getToShapeId().get(1));
+							String condition0 = "";
+							String condition1 = "";
+							String condition2 = "";
+							if (elementConnectors != null && elementConnectors.getConnector() != null) {
+								for (Connector connector : elementConnectors.getConnector()) {
+									String conName = connector.getName();
+									if (conName!=null && !conName.isEmpty()) {
+										if (connector.getFrom().equals(fromShape.getId()) && connector.getTo().equals(i.getId())) {
+											colset = mapVariable.get(conName);
+											condition0 = conName;
+										} else if (connector.getFrom().equals(i.getId()) && connector.getTo().equals(toShape1.getId())) {
+											if (toShape1.getX().intValue() <= i.getX().intValue()) {
+												condition1 = TranformUtils.performCPNMLConditionString(conName);
+											} else {
+												condition2 = TranformUtils.performCPNMLConditionString(conName);
+											}
+										} else if (connector.getFrom().equals(i.getId()) && connector.getTo().equals(toShape2.getId())) {
+											if (toShape2.getX().intValue() <= i.getX().intValue()) {
+												condition1 = TranformUtils.performCPNMLConditionString(conName);
+											} else {
+												condition2 = TranformUtils.performCPNMLConditionString(conName);
+											}
+										}
+									}
+								}
+							}
+							if (condition0.isEmpty() && condition1.isEmpty() && condition2.isEmpty()) {
+								cpnObject = TranformUtils.generateORSplitCPNObject(xPoint, yPoint, name);
+							} else {
+								cpnObject = TranformUtils.generateXORSplitWithConditionCPNObject(xPoint, yPoint, name, colset, condition0, condition1, condition2);	
+							}
+							
 							incomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
 							outcomeCPNId.add(cpnObject.getPlaceList().get(1).getId());
 							outcomeCPNId.add(cpnObject.getPlaceList().get(2).getId());
@@ -793,15 +935,50 @@ public class EPC2CPN extends JFrame implements ActionListener {
 							incomeCPNId.add(cpnObject.getPlaceList().get(1).getId());
 							outcomeCPNId.add(cpnObject.getPlaceList().get(2).getId());
 						}
-					} else if (Constant.EPC_SHAPE_TYPE_PROCESSPATH.equals(i.getShapeType())
-							|| Constant.EPC_SHAPE_TYPE_INFORMATIONRESOURCE.equals(i.getShapeType())
-							|| Constant.EPC_SHAPE_TYPE_ROLE.equals(i.getShapeType())
+					} else if (Constant.EPC_SHAPE_TYPE_PROCESSPATH.equals(i.getShapeType())) {
+						countEvent++;
+						String name = i.getName() + "_PP_" + countEvent;
+						String marking = element.getInitMark();
+						
+						cpnObject = TranformUtils.generateEventDummyFunctionCPNObject(xPoint, yPoint, name, marking);
+						incomeCPNId.add(cpnObject.getTransList().get(0).getId());
+						
+						outcomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
+					} else if (Constant.EPC_SHAPE_TYPE_ROLE.equals(i.getShapeType())
 							|| Constant.EPC_SHAPE_TYPE_SYSTEM.equals(i.getShapeType())
 							|| Constant.EPC_SHAPE_TYPE_ORGANIZATIONUNIT.equals(i.getShapeType())) {
+						
+						String colset = Constant.CPN_COLSET_STRING;
+						String marking = "1`\""+element.getInitMark()+"\"";
+						
 						countArtifact++;
 						String name = i.getName() + "_A_" + countArtifact;
+						cpnObject = TranformUtils.generateEventCPNObject(xPoint, yPoint, name, marking, colset);
+						incomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
+						outcomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
+					} else if (Constant.EPC_SHAPE_TYPE_INFORMATIONRESOURCE.equals(i.getShapeType())) {
+						
+						String colset = Constant.CPN_COLSET_STRING;
 						String marking = element.getInitMark();
-						cpnObject = TranformUtils.generateEventCPNObject(xPoint, yPoint, name, marking);
+						boolean isCustomVariable = false;
+						try{
+							String[] shapeName = i.getName().split("\\|");
+							if (shapeName!=null && shapeName.length == 3) {
+								colset = shapeName[0];
+							}
+							
+							if (Constant.CPN_COLSET_INT.equals(colset) || Constant.CPN_COLSET_UNIT.equals(colset)) {
+								marking = "1`"+marking;
+							} else if (Constant.CPN_COLSET_STRING.equals(colset)) {
+								marking = "1`\""+marking+"\"";
+							}
+						} catch (Exception ex) {
+
+						}
+						
+						countArtifact++;
+						String name = isCustomVariable?i.getName() + "_A_" + countArtifact:"A_" + countArtifact;
+						cpnObject = TranformUtils.generateEventCPNObject(xPoint, yPoint, name, marking, colset);
 						incomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
 						outcomeCPNId.add(cpnObject.getPlaceList().get(0).getId());
 					}
@@ -819,6 +996,20 @@ public class EPC2CPN extends JFrame implements ActionListener {
 					for (Connector connector : elementConnectors.getConnector()) {
 						EPCElement fromElement = mapEPCElement.get(connector.getFrom());
 						EPCElement toElement = mapEPCElement.get(connector.getTo());
+						
+
+						String marking = "1`()";
+						String conName = connector.getName();
+						if (conName!=null && conName.trim().length() > 0) {
+							marking = conName;
+						}
+						
+						int xPoint1 = fromElement.getShape().getX().intValue() - initX;
+						int yPoint1 = initY - fromElement.getShape().getY().intValue();
+						int xPoint2 = toElement.getShape().getX().intValue() - initX;
+						int yPoint2 = initY - toElement.getShape().getY().intValue();
+						int xAnno = (xPoint1+xPoint2)/2;
+						int yAnno = (yPoint1+yPoint2)/2;
 						
 						String arcType = "";
 						String transId = "";
@@ -843,17 +1034,19 @@ public class EPC2CPN extends JFrame implements ActionListener {
 							}
 							transId = fromElement.getOutcomeCPNId().get(0);
 							
-							arcList.add(TranformUtils.generateArcObject(0, 0, arcType, transId, placeId, "1`()"));
+							arcList.add(TranformUtils.generateArcObject(xAnno, yAnno, arcType, transId, placeId, marking));
 						} else if (Constant.EPC_SHAPE_TYPE_EVENT.equals(fromElement.getShape().getShapeType())) {
 							arcType = Constant.CPN_ARC_TYPE_PTOT;
 							
 							placeId = fromElement.getOutcomeCPNId().get(0);
 							transId = toElement.getIncomeCPNId().get(0);
-							arcList.add(TranformUtils.generateArcObject(0, 0, arcType, transId, placeId, "1`()"));
+							arcList.add(TranformUtils.generateArcObject(xAnno, yAnno, arcType, transId, placeId, "1`()"));
 						} else if (Constant.EPC_SHAPE_TYPE_AND.equals(fromElement.getShape().getShapeType())
 								|| Constant.EPC_SHAPE_TYPE_XOR.equals(fromElement.getShape().getShapeType())
 								|| Constant.EPC_SHAPE_TYPE_OR.equals(fromElement.getShape().getShapeType())) {
 							arcType = Constant.CPN_ARC_TYPE_PTOT;
+							
+							marking = "1`()";
 							
 							if ("Split".equals(fromElement.getOperatorType())) {
 								if (fromElement.getShape().getX().intValue() > toElement.getShape().getX().intValue()) {
@@ -866,24 +1059,38 @@ public class EPC2CPN extends JFrame implements ActionListener {
 								placeId = fromElement.getOutcomeCPNId().get(0);
 								transId = toElement.getIncomeCPNId().get(0);
 							}
-							arcList.add(TranformUtils.generateArcObject(0, 0, arcType, transId, placeId, "1`()"));
-						} else if (Constant.EPC_SHAPE_TYPE_PROCESSPATH.equals(fromElement.getShape().getShapeType())
-								|| Constant.EPC_SHAPE_TYPE_INFORMATIONRESOURCE.equals(fromElement.getShape().getShapeType())
-								|| Constant.EPC_SHAPE_TYPE_ROLE.equals(fromElement.getShape().getShapeType())
+							arcList.add(TranformUtils.generateArcObject(xAnno, yAnno, arcType, transId, placeId, marking));
+						} else if (Constant.EPC_SHAPE_TYPE_ROLE.equals(fromElement.getShape().getShapeType())
 								|| Constant.EPC_SHAPE_TYPE_SYSTEM.equals(fromElement.getShape().getShapeType())
 								|| Constant.EPC_SHAPE_TYPE_ORGANIZATIONUNIT.equals(fromElement.getShape().getShapeType())) {
 							arcType = Constant.CPN_ARC_TYPE_PTOT;
 							
+							if (conName==null || conName.trim().length() == 0) {
+								marking = "1`\"" + fromElement.getShape().getName() + "\"";
+							}
+							
 							placeId = fromElement.getOutcomeCPNId().get(0);
 							transId = toElement.getIncomeCPNId().get(0);
-							arcList.add(TranformUtils.generateArcObject(0, 0, arcType, transId, placeId, "1`()"));
+							arcList.add(TranformUtils.generateArcObject(xAnno, yAnno, arcType, transId, placeId, marking));
+						} else if (Constant.EPC_SHAPE_TYPE_PROCESSPATH.equals(fromElement.getShape().getShapeType())
+								|| Constant.EPC_SHAPE_TYPE_INFORMATIONRESOURCE.equals(fromElement.getShape().getShapeType())) {
+							arcType = Constant.CPN_ARC_TYPE_PTOT;
+							
+							if (conName==null || conName.trim().length() == 0) {
+								marking = "1`\"" + fromElement.getShape().getName() + "\"";
+							}
+							
+							placeId = fromElement.getOutcomeCPNId().get(0);
+							transId = toElement.getIncomeCPNId().get(0);
+							arcList.add(TranformUtils.generateArcObject(xAnno, yAnno, arcType, transId, placeId, marking));
 						}
 					}
 					tempObject.setArcList(arcList);
 					transformItem += TranformUtils.performCPNElemetXMLString(tempObject, properties);
 				}
 				
-				elementInfo = cpnTemplate.replaceAll("#TRANSFORM_ITEM", transformItem);
+				elementInfo = cpnTemplate.replaceAll("#TRANSFORM_ITEM", transformItem)
+						.replaceAll("#TRANSFORM_VARIABLE", transformVariable);
 			}
 			
 			JOptionPane.showMessageDialog(frame, "Confirm marking.", "EPC Element", JOptionPane.INFORMATION_MESSAGE);

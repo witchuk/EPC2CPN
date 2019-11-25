@@ -18,6 +18,10 @@ public class Constant {
 	public static final String EPC_SHAPE_TYPE_INFORMATIONFLOW = "EPCInformationFlow";
 
 	public static final String CPN_COLSET_UNIT = "UNIT";
+	public static final String CPN_COLSET_INT = "INT";
+	public static final String CPN_COLSET_BOOL = "BOOL";
+	public static final String CPN_COLSET_STRING = "STRING";
+	public static final String CPN_COLSET_REAL = "REAL";
 	public static final String CPN_ARC_TYPE_PTOT = "PtoT";
 	public static final String CPN_ARC_TYPE_TTOP = "TtoP";
 	public static final String CPN_ARC_TYPE_INHIBITOR = "Inhibitor";
