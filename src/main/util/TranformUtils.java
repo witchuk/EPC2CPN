@@ -17,7 +17,6 @@ import main.model.CommonField;
 import main.model.Place;
 import main.model.Trans;
 import main.model.Variable;
-import object.visualparadigm.Shape;
 
 public class TranformUtils {
 	
@@ -32,14 +31,6 @@ public class TranformUtils {
 		String currentTime = String.valueOf(System.currentTimeMillis());
 		int rand3digit = new Random().nextInt(900) + 100;
 		return currentTime.substring(currentTime.length()-7, currentTime.length()) + rand3digit;
-	}
-	
-	public static void createOperXorSplit() {
-		
-	}
-	
-	public static List<Shape> findStartEvent() {
-		return null;
 	}
 	
 	private static Place generatePlaceObject(int x, int y, String text, String type, String initMark) {

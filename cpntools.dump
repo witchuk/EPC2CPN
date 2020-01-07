@@ -1,195 +1,77 @@
-Beta execution aborted: Stop is called.
-
-Stop message:
-  "*** Exception processing
-getNumber: Syntax error - looking at: "#""
+Beta execution aborted: Reference is none.
 
 Call chain: (nti_ms)
 
-  item <stop#> in ~beta/basiclib/betaenv
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-  item syntaxError#streamException#<exception#> in ~beta/basiclib/betaenv
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-  item <*> in ~beta/basiclib/private/numberioBody
-    -- NUMBERIOGETNUMBERBODY-~ in ~beta/basiclib/private/numberioBody
-  item <NUMBERIOGETNUMBERBODY-~> in ~beta/basiclib/private/numberioBody
-    -- getReal#getNumber# in ~beta/basiclib/numberio
-  item getReal#<getNumber#> in ~beta/basiclib/numberio
-    -- text#stream# in ~beta/basiclib/betaenv
-  item <lookupReal#>lookup# in C:/cpn2000/cpnet/xmlutilities
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item lookupReal#<lookup#> in C:/cpn2000/cpnet/xmlutilities
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item *<scanAttributes#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item lookupReal#<lookup#> in C:/cpn2000/cpnet/xmlutilities
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item <*>scanElements# in C:/cpn2000/cpnet/cpnetxml
-    -- load#load#load#load#load# in C:/cpn2000/cpnet/cpnetxml
-  item *<scanElements#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item onElement#<onElement#> in ~beta/xml/xml
-    -- *select# in ~beta/xml/private/xmlbody
-  item <selector#>selector# in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item selector#<selector#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item *<select#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item <*>scan# in ~beta/xml/private/xmlbody
-    -- *scanElements# in C:/cpn2000/cpnet/cpnetxml
-  item *<scan#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item *<scanElements#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item load#load#<load#>load#load# in C:/cpn2000/cpnet/cpnetxml
-    -- AnnotationLoader#InscriptionLoader#PageElementLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-  item load#load#load#<load#>load# in C:/cpn2000/cpnet/cpnetxml
-    -- AnnotationLoader#InscriptionLoader#PageElementLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-  item load#load#load#load#<load#> in C:/cpn2000/cpnet/cpnetxml
-    -- AnnotationLoader#InscriptionLoader#PageElementLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-  item <*>scanElements# in C:/cpn2000/cpnet/cpnetxml
-    -- load#load#load#load# in C:/cpn2000/cpnet/cpnetxml
-  item *<scanElements#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item onElement#<onElement#> in ~beta/xml/xml
-    -- *select# in ~beta/xml/private/xmlbody
-  item <selector#>selector# in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item selector#<selector#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item *<select#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item <*>scan# in ~beta/xml/private/xmlbody
-    -- *scanElements# in C:/cpn2000/cpnet/cpnetxml
-  item *<scan#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item *<scanElements#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item <load#>load#load#load# in C:/cpn2000/cpnet/cpnetxml
-    -- ArcLoader#PageElementLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-  item load#<load#>load#load# in C:/cpn2000/cpnet/cpnetxml
-    -- ArcLoader#PageElementLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-  item load#load#<load#>load# in C:/cpn2000/cpnet/cpnetxml
-    -- ArcLoader#PageElementLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-  item load#load#load#<load#> in C:/cpn2000/cpnet/cpnetxml
-    -- ArcLoader#PageElementLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-  item <*>scanElements# in C:/cpn2000/cpnet/cpnetxml
-    -- load#load#load# in C:/cpn2000/cpnet/cpnetxml
-  item *<scanElements#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item onElement#<onElement#> in ~beta/xml/xml
-    -- *select# in ~beta/xml/private/xmlbody
-  item <selector#>selector# in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item selector#<selector#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item *<select#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item <*>scan# in ~beta/xml/private/xmlbody
-    -- *scanElements# in C:/cpn2000/cpnet/cpnetxml
-  item *<scan#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item *<scanElements#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item <load#>load#load# in C:/cpn2000/cpnet/cpnetxml
-    -- CPNPageLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-  item load#<load#>load# in C:/cpn2000/cpnet/cpnetxml
-    -- CPNPageLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-  item load#load#<load#> in C:/cpn2000/cpnet/cpnetxml
-    -- CPNPageLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-  item <*>scanElements# in C:/cpn2000/cpnet/cpnetxml
-    -- * in C:/cpn2000/cpnet/cpnetxml
-  item *<scanElements#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item onElement#<onElement#> in ~beta/xml/xml
-    -- *select# in ~beta/xml/private/xmlbody
-  item <selector#>selector# in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item selector#<selector#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item *<select#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item <*>scan# in ~beta/xml/private/xmlbody
-    -- *scanElements# in C:/cpn2000/cpnet/cpnetxml
-  item *<scan#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item *<scanElements#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item <*> in C:/cpn2000/cpnet/cpnetxml
-    -- load#load# in C:/cpn2000/cpnet/cpnetxml
-  item <load#>load# in C:/cpn2000/cpnet/cpnetxml
-    -- CPNetLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-  item load#<load#> in C:/cpn2000/cpnet/cpnetxml
-    -- CPNetLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-  item <*> in C:/cpn2000/cpntools/private/cpnworkspacebody
-    -- processCPNet# in C:/cpn2000/cpntools/cpnworkspace
-  item <processCPNet#> in C:/cpn2000/cpntools/cpnworkspace
-    -- WorkspaceElements# in C:/cpn2000/cpntools/cpnworkspace
-  item <*>scanElements# in C:/cpn2000/cpntools/private/cpnworkspacebody
-    -- * in C:/cpn2000/cpntools/private/cpnworkspacebody
-  item *<scanElements#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item onElement#<onElement#> in ~beta/xml/xml
-    -- *select# in ~beta/xml/private/xmlbody
-  item <selector#>selector# in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item selector#<selector#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item *<select#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item <*>scan# in ~beta/xml/private/xmlbody
-    -- *scanElements# in C:/cpn2000/cpntools/private/cpnworkspacebody
-  item *<scan#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item *<scanElements#> in ~beta/xml/xml
-    -- Element#AbstractElement# in ~beta/xml/xml
-  item <*> in C:/cpn2000/cpntools/private/cpnworkspacebody
-    -- unPack# in C:/cpn2000/cpntools/cpnworkspace
-  item <unPack#> in C:/cpn2000/cpntools/cpnworkspace
-    -- WorkspaceElements# in C:/cpn2000/cpntools/cpnworkspace
-  item <*> in C:/cpn2000/cpntools/instruments/private/netinstrumentsbody
-    -- loadNetFromDisc# in C:/cpn2000/cpntools/instruments/private/netinstrumentsbody
-  item <loadNetFromDisc#> in C:/cpn2000/cpntools/instruments/private/netinstrumentsbody
-    -- * in C:/cpn2000/cpntools/instruments/private/netinstrumentsbody
-  item <loadSavedNet#> in C:/cpn2000/cpntools/instruments/private/netinstrumentsbody
-    -- * in C:/cpn2000/cpntools/instruments/private/netinstrumentsbody
-  item <*> in C:/cpn2000/cpntools/instruments/private/netinstrumentsbody
-    -- apply#apply#apply# in C:/cpn2000/cpntools/instruments/netinstruments
-  item <apply#>apply#apply# in C:/cpn2000/cpntools/instruments/netinstruments
-    -- LoadNetCommand#CPNcommand#Command#Notifier#Element# in C:/cpn2000/cpntools/instruments/netinstruments
-  item apply#<apply#>apply# in C:/cpn2000/cpntools/instruments/cpncommands
-    -- LoadNetCommand#CPNcommand#Command#Notifier#Element# in C:/cpn2000/cpntools/instruments/netinstruments
-  item apply#apply#<apply#> in ~beta/postwimp/workspace
-    -- LoadNetCommand#CPNcommand#Command#Notifier#Element# in C:/cpn2000/cpntools/instruments/netinstruments
-  item <execute#> in C:/cpn2000/cpntools/instruments/cpncommands
-    -- HistoryCommandManager# in C:/cpn2000/cpntools/instruments/cpncommands
-  item <apply#>apply# in C:/cpn2000/cpntools/instruments/cpninstrument
-    -- CPNnormalInstrument#CPNsimpleinstrument#nonGenericInstrumentWithOptions#Instrument# in C:/cpn2000/cpntools/instruments/cpninstrument
-  item apply#<apply#> in ~beta/postwimp/foundation/world
-    -- CPNnormalInstrument#CPNsimpleinstrument#nonGenericInstrumentWithOptions#Instrument# in C:/cpn2000/cpntools/instruments/cpninstrument
-  item <apply#>apply# in ~beta/postwimp/foundation/world
-    -- LoadNetInstrument#CPNinstrument#CPNGenericInstrument#GenericInstrument#EditableInstrument#Instrument# in C:/cpn2000/cpntools/instruments/netinstruments
-  item apply#<apply#> in ~beta/postwimp/foundation/world
-    -- LoadNetInstrument#CPNinstrument#CPNGenericInstrument#GenericInstrument#EditableInstrument#Instrument# in C:/cpn2000/cpntools/instruments/netinstruments
-  item <*>scan# in C:/cpn2000/cpntools/private/cpnworkspacebody
-    -- * in C:/cpn2000/cpntools/private/cpnworkspacebody
+  item <*>scan# in C:/cpn2000/cpnet/private/cpnetbody
+    -- Receive#Receive# in C:/cpn2000/cpnet/cpnet
   item *<scan#> in ~beta/containers/container
-    -- filenames#list#container# in C:/cpn2000/cpntools/private/cpnworkspacebody
+    -- lst#list#container# in C:/cpn2000/cpnet/cpnet
   item <thescanner#>theScanner# in ~beta/containers/list
-    -- filenames#list#container# in C:/cpn2000/cpntools/private/cpnworkspacebody
+    -- lst#list#container# in C:/cpn2000/cpnet/cpnet
   item thescanner#<theScanner#> in ~beta/containers/container
-    -- filenames#list#container# in C:/cpn2000/cpntools/private/cpnworkspacebody
+    -- lst#list#container# in C:/cpn2000/cpnet/cpnet
   item *<scan#> in ~beta/containers/container
-    -- filenames#list#container# in C:/cpn2000/cpntools/private/cpnworkspacebody
-  item <*> in C:/cpn2000/cpntools/private/cpnworkspacebody
-    -- parseArguments# in C:/cpn2000/cpntools/cpnworkspace
-  item <parseArguments#> in C:/cpn2000/cpntools/cpnworkspace
+    -- lst#list#container# in C:/cpn2000/cpnet/cpnet
+  item <Receive#>Receive# in C:/cpn2000/cpnet/cpnet
+    -- GetEnabledTransitions#GetEnabledTransitionInstances#CPNMLCommand#MLCommand# in C:/cpn2000/cpnet/cpnet
+  item Receive#<Receive#> in C:/cpn2000/document/ml/mlcom
+    -- GetEnabledTransitions#GetEnabledTransitionInstances#CPNMLCommand#MLCommand# in C:/cpn2000/cpnet/cpnet
+  item <receiveCommand#> in C:/cpn2000/document/ml/mlcom
+    -- ML#MLCom#Monitor# in C:/cpn2000/cpnet/cpnet
+  item <onBIS#>onBISPattern# in C:/cpn2000/document/ml/private/mlcombody
+    -- *Get#withIdle#withPE# in C:/cpn2000/document/ml/private/mlcombody
+  item onBIS#<onBISPattern#> in C:/cpn2000/document/ml/mlsocket
+    -- *Get#withIdle#withPE# in C:/cpn2000/document/ml/private/mlcombody
+  item <*> in C:/cpn2000/document/ml/private/mlsocketbody
+    -- * in C:/cpn2000/document/ml/private/mlsocketbody
+  item <*> in C:/cpn2000/document/ml/private/mlsocketbody
+    -- *Get#withIdle#withPE# in C:/cpn2000/document/ml/private/mlcombody
+  item *<Get#>withIdle#withPE# in C:/cpn2000/document/ml/mlsocket
+    -- MLSocket#BasicSocket# in C:/cpn2000/document/ml/mlsocket
+  item *Get#<withIdle#>withPE# in ~beta/process/basicsocket
+    -- MLSocket#BasicSocket# in C:/cpn2000/document/ml/mlsocket
+  item *Get#withIdle#<withPE#> in ~beta/process/basicsocket
+    -- MLSocket#BasicSocket# in C:/cpn2000/document/ml/mlsocket
+  comp <ReceiverThread#>System#SysHead# in C:/cpn2000/document/ml/private/mlcombody
+    -- MLCOMPRIVATE-~ in C:/cpn2000/document/ml/private/mlcombody
+  comp ReceiverThread#<System#>SysHead# in ~beta/basiclib/basicsystemenv
     -- PROGRAM-~CPNWorkSpace#Workspace#World#SystemEnv#SysHead# in C:/cpn2000/cpntools/cpntools
-  comp PROGRAM-~<CPNWorkSpace#>Workspace#World#SystemEnv#SysHead# in C:/cpn2000/cpntools/cpnworkspace
+  comp ReceiverThread#System#<SysHead#> in ~beta/basiclib/basicsystemenv
     -- BETAENV-~ in ~beta/basiclib/betaenv
-  comp PROGRAM-~CPNWorkSpace#<Workspace#>World#SystemEnv#SysHead# in ~beta/postwimp/workspace
+
+  item attNext#<realValue#> in ~beta/basiclib/betaenv
     -- BETAENV-~ in ~beta/basiclib/betaenv
+  item <UIIdle#>booleanValue# in ~beta/guienv/private/winnt/guienvntsystemenvbody
+    -- PIOPRIVATE-~ in ~beta/guienv/private/winnt/guienvntsystemenvbody
+  item UIIdle#<booleanValue#> in ~beta/basiclib/betaenv
+    -- BETAENV-~ in ~beta/basiclib/betaenv
+  item <processOneEvent#> in ~beta/guienv/private/winnt/guienv_ntiprivate
+    -- GUIenv# in ~beta/guienv/guienv
+  item <next#> in ~beta/guienv/private/winnt/guienvntsystemenvbody
+    -- XcallbackThread#System#SysHead# in ~beta/guienv/private/winnt/guienvntsystemenvbody
+  item <registerCallback#>XsystemEnvHandleCallbackP# in ~beta/guienv/private/winnt/guienvntsystemenvbody
+    -- PIOPRIVATE-~ in ~beta/guienv/private/winnt/guienvntsystemenvbody
+  item registerCallback#<XsystemEnvHandleCallbackP#> in ~beta/guienv/guienv
+    -- GUIenv# in ~beta/guienv/guienv
+  item <StandardWindowProc#> in ~beta/guienv/private/winnt/guienv_ntiprivate
+    -- GUIenv# in ~beta/guienv/guienv
+  item <StandardWindowProc#> in ~beta/guienv/private/winnt/guienv_ntiprivate
+    -- GUIenv# in ~beta/guienv/guienv
+  [ EXTERNAL ACTIVATION PART ]
+  item <processOneEvent#> in ~beta/guienv/private/winnt/guienv_ntiprivate
+    -- GUIenv# in ~beta/guienv/guienv
+  item <mainLoop#> in ~beta/guienv/private/winnt/guienv_ntiprivate
+    -- GUIenv# in ~beta/guienv/guienv
+  item <GUIenv#> in ~beta/guienv/guienv
+    -- BETAENV-~ in ~beta/basiclib/betaenv
+  item <run#>run# in ~beta/postwimp/foundation/guisurface
+    -- GUISurface#Surface# in ~beta/postwimp/foundation/guisurface
+  item run#<run#> in ~beta/postwimp/foundation/abstractsurface
+    -- GUISurface#Surface# in ~beta/postwimp/foundation/guisurface
+  item <platformAfter#> in ~beta/postwimp/foundation/private/worldbody
+    -- PROGRAM-~CPNWorkSpace#Workspace#World#SystemEnv#SysHead# in C:/cpn2000/cpntools/cpntools
+  item <after#> in ~beta/postwimp/foundation/world
+    -- PROGRAM-~CPNWorkSpace#Workspace#World#SystemEnv#SysHead# in C:/cpn2000/cpntools/cpntools
   comp PROGRAM-~CPNWorkSpace#Workspace#<World#>SystemEnv#SysHead# in ~beta/postwimp/foundation/world
     -- BETAENV-~ in ~beta/basiclib/betaenv
   comp PROGRAM-~CPNWorkSpace#Workspace#World#<SystemEnv#>SysHead# in ~beta/basiclib/basicsystemenv
@@ -225,512 +107,5 @@ Call chain: (nti_ms)
 
 Low level information:
 
-Stop message:
-  "*** Exception processing
-getNumber: Syntax error - looking at: "#""
-
 Call chain: (nti_ms)
 
-  item <stop#> in ~beta/basiclib/betaenv
-  { PC  0x489c83Warning! nm(DumpSectionTable): Couldn't find section number of .text
- <+0x359c82>, object 0x119a6d0, proto 0x94ffbc stop# [ast: 0x0001,0x0973] <+0x81ffbb> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  item <stop#> in ~beta/basiclib/betaenv
-  { PC  0x489c83 <+0x359c82>, object 0x119a6d0, proto 0x94ffbc stop# [ast: 0x0001,0x0973] <+0x81ffbb> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  item <stop#> in ~beta/basiclib/betaenv
-  { PC  0x489c83 <+0x359c82>, object 0x119a6d0, proto 0x94ffbc stop# [ast: 0x0001,0x0973] <+0x81ffbb> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  item <stop#> in ~beta/basiclib/betaenv
-  { PC  0x489c83 <+0x359c82>, object 0x119a6d0, proto 0x94ffbc stop# [ast: 0x0001,0x0973] <+0x81ffbb> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  item <stop#> in ~beta/basiclib/betaenv
-  { PC  0x489c83 <+0x359c82>, object 0x119a6d0, proto 0x94ffbc stop# [ast: 0x0001,0x0973] <+0x81ffbb> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  item <stop#> in ~beta/basiclib/betaenv
-  { PC  0x489c83 <+0x359c82>, object 0x119a6d0, proto 0x94ffbc stop# [ast: 0x0001,0x0973] <+0x81ffbb> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  item <stop#> in ~beta/basiclib/betaenv
-  { PC  0x489c83 <+0x359c82>, object 0x119a6d0, proto 0x94ffbc stop# [ast: 0x0001,0x0973] <+0x81ffbb> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  item <stop#> in ~beta/basiclib/betaenv
-  { PC  0x489c83 <+0x359c82>, object 0x119a6d0, proto 0x94ffbc stop# [ast: 0x0001,0x0973] <+0x81ffbb> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  item <stop#> in ~beta/basiclib/betaenv
-  { PC  0x489c83 <+0x359c82>, object 0x119a6d0, proto 0x94ffbc stop# [ast: 0x0001,0x0973] <+0x81ffbb> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  item <stop#> in ~beta/basiclib/betaenv
-  { PC  0x489c83 <+0x359c82>, object 0x119a6d0, proto 0x94ffbc stop# [ast: 0x0001,0x0973] <+0x81ffbb> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  item syntaxError#streamException#<exception#> in ~beta/basiclib/betaenv
-  { PC  0x48a21f <+0x35a21e>, object 0x119a458, proto 0x950674 exception# [ast: 0x0001,0x0b6b] <+0x820673> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  item <*> in ~beta/basiclib/private/numberioBody
-  { PC  0x607220 <+0x4d721f>, object 0x119a338, proto 0xa0a62c * [ast: 0x0001,0x0007] <+0x8da62b> }
-    -- NUMBERIOGETNUMBERBODY-~ in ~beta/basiclib/private/numberioBody
-    { Surrounding object 0x119a328, proto 0xa0a5ec NUMBERIOGETNUMBERBODY-~ [ast: 0x0001,0x0001] <+0x8da5eb> }
-  item <NUMBERIOGETNUMBERBODY-~> in ~beta/basiclib/private/numberioBody
-  { PC  0x6065b5 <+0x4d65b4>, object 0x119a328, proto 0xa0a5ec NUMBERIOGETNUMBERBODY-~ [ast: 0x0001,0x0001] <+0x8da5eb> }
-    -- getReal#getNumber# in ~beta/basiclib/numberio
-    { Surrounding object 0x119a310, proto 0xad7c9e getReal# [ast: 0x0001,0x00df] <+0x9a7c9d> }
-  item getReal#<getNumber#> in ~beta/basiclib/numberio
-  { PC  0x73f5be <+0x60f5bd>, object 0x119a310, proto 0xad79ca getNumber# [ast: 0x0001,0x0003] <+0x9a79c9> }
-    -- text#stream# in ~beta/basiclib/betaenv
-    { Surrounding object 0x2fa1200, proto 0x94f41e text# [ast: 0x0001,0x05d1] <+0x81f41d> }
-  item <lookupReal#>lookup# in C:/cpn2000/cpnet/xmlutilities
-  { PC  0x700821 <+0x5d0820>, object 0x119a1d0, proto 0xaa8e9a lookupReal# [ast: 0x0003,0x01f4] <+0x978e99> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2fa1100, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item lookupReal#<lookup#> in C:/cpn2000/cpnet/xmlutilities
-  { PC  0x700932 <+0x5d0931>, object 0x119a1d0, proto 0xaa8e32 lookup# [ast: 0x0003,0x01bc] <+0x978e31> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2fa1100, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item *<scanAttributes#> in ~beta/xml/xml
-  { PC  0x5fa311 <+0x4ca310>, object 0x119a250, proto 0xad0e18 scanAttributes# [ast: 0x0001,0x00ee] <+0x9a0e17> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2fa1100, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item lookupReal#<lookup#> in C:/cpn2000/cpnet/xmlutilities
-  { PC  0x700852 <+0x5d0851>, object 0x119a1d0, proto 0xaa8e32 lookup# [ast: 0x0003,0x01bc] <+0x978e31> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2fa1100, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item <*>scanElements# in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5f1b81 <+0x4c1b80>, object 0x119a040, proto 0x9fe29e * [ast: 0x0001,0x0269] <+0x8ce29d> }
-    -- load#load#load#load#load# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x1199688, proto 0x9ffa80 load# [ast: 0x0001,0x0c25] <+0x8cfa7f> }
-  item *<scanElements#> in ~beta/xml/xml
-  { PC  0x5fa3f6 <+0x4ca3f5>, object 0x119a040, proto 0xad0e52 scanElements# [ast: 0x0001,0x00f8] <+0x9a0e51> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2fa0fe0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item onElement#<onElement#> in ~beta/xml/xml
-  { PC  0x73850e <+0x60850d>, object 0x119a108, proto 0xad0b3a onElement# [ast: 0x0001,0x0024] <+0x9a0b39> }
-    -- *select# in ~beta/xml/private/xmlbody
-    { Surrounding object 0x119a0e8, proto 0xa06b82 * [ast: 0x0007,0x0008] <+0x8d6b81> }
-  item <selector#>selector# in ~beta/xml/xml
-  { PC  0x7382c5 <+0x6082c4>, object 0x119a0f8, proto 0xad0f62 selector# [ast: 0x0001,0x0135] <+0x9a0f61> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2fa1100, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item selector#<selector#> in ~beta/xml/xml
-  { PC  0x7384b2 <+0x6084b1>, object 0x119a0f8, proto 0xad0ba2 selector# [ast: 0x0001,0x0048] <+0x9a0ba1> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2fa1100, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item *<select#> in ~beta/xml/xml
-  { PC  0x7384f2 <+0x6084f1>, object 0x119a0e8, proto 0xad0b02 select# [ast: 0x0001,0x0020] <+0x9a0b01> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2fa1100, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item <*>scan# in ~beta/xml/private/xmlbody
-  { PC  0x5fa3a0 <+0x4ca39f>, object 0x119a078, proto 0xa06b50 * [ast: 0x0007,0x0002] <+0x8d6b4f> }
-    -- *scanElements# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x119a040, proto 0x9fe29e * [ast: 0x0001,0x0269] <+0x8ce29d> }
-  item *<scan#> in ~beta/xml/xml
-  { PC  0x5fa277 <+0x4ca276>, object 0x119a078, proto 0xad0de8 scan# [ast: 0x0001,0x00e3] <+0x9a0de7> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2fa0fe0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item *<scanElements#> in ~beta/xml/xml
-  { PC  0x5fa370 <+0x4ca36f>, object 0x119a040, proto 0xad0e52 scanElements# [ast: 0x0001,0x00f8] <+0x9a0e51> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2fa0fe0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item load#load#<load#>load#load# in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5f1afc <+0x4c1afb>, object 0x1199688, proto 0x9fe262 load# [ast: 0x0001,0x0260] <+0x8ce261> }
-    -- AnnotationLoader#InscriptionLoader#PageElementLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x1191e68, proto 0x9ff9f6 AnnotationLoader# [ast: 0x0001,0x0c11] <+0x8cf9f5> }
-  item load#load#load#<load#>load# in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5f26cf <+0x4c26ce>, object 0x1199688, proto 0x9fdf96 load# [ast: 0x0001,0x01a9] <+0x8cdf95> }
-    -- AnnotationLoader#InscriptionLoader#PageElementLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x1191e68, proto 0x9ff9f6 AnnotationLoader# [ast: 0x0001,0x0c11] <+0x8cf9f5> }
-  item load#load#load#load#<load#> in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5f2d30 <+0x4c2d2f>, object 0x1199688, proto 0x9fd97c load# [ast: 0x0001,0x001f] <+0x8cd97b> }
-    -- AnnotationLoader#InscriptionLoader#PageElementLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x1191e68, proto 0x9ff9f6 AnnotationLoader# [ast: 0x0001,0x0c11] <+0x8cf9f5> }
-  item <*>scanElements# in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5ec74a <+0x4bc749>, object 0x1197a88, proto 0x9ffc44 * [ast: 0x0001,0x0d43] <+0x8cfc43> }
-    -- load#load#load#load# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x1191e50, proto 0x9ff972 load# [ast: 0x0001,0x0c03] <+0x8cf971> }
-  item *<scanElements#> in ~beta/xml/xml
-  { PC  0x5fa3f6 <+0x4ca3f5>, object 0x1197a88, proto 0xad0e52 scanElements# [ast: 0x0001,0x00f8] <+0x9a0e51> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f9fac0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item onElement#<onElement#> in ~beta/xml/xml
-  { PC  0x73850e <+0x60850d>, object 0x11995c0, proto 0xad0b3a onElement# [ast: 0x0001,0x0024] <+0x9a0b39> }
-    -- *select# in ~beta/xml/private/xmlbody
-    { Surrounding object 0x11995a0, proto 0xa06b82 * [ast: 0x0007,0x0008] <+0x8d6b81> }
-  item <selector#>selector# in ~beta/xml/xml
-  { PC  0x7382c5 <+0x6082c4>, object 0x11995b0, proto 0xad0f62 selector# [ast: 0x0001,0x0135] <+0x9a0f61> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2fa0fe0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item selector#<selector#> in ~beta/xml/xml
-  { PC  0x7384b2 <+0x6084b1>, object 0x11995b0, proto 0xad0ba2 selector# [ast: 0x0001,0x0048] <+0x9a0ba1> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2fa0fe0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item *<select#> in ~beta/xml/xml
-  { PC  0x7384f2 <+0x6084f1>, object 0x11995a0, proto 0xad0b02 select# [ast: 0x0001,0x0020] <+0x9a0b01> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2fa0fe0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item <*>scan# in ~beta/xml/private/xmlbody
-  { PC  0x5fa3a0 <+0x4ca39f>, object 0x1197ac8, proto 0xa06b50 * [ast: 0x0007,0x0002] <+0x8d6b4f> }
-    -- *scanElements# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x1197a88, proto 0x9ffc44 * [ast: 0x0001,0x0d43] <+0x8cfc43> }
-  item *<scan#> in ~beta/xml/xml
-  { PC  0x5fa277 <+0x4ca276>, object 0x1197ac8, proto 0xad0de8 scan# [ast: 0x0001,0x00e3] <+0x9a0de7> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f9fac0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item *<scanElements#> in ~beta/xml/xml
-  { PC  0x5fa370 <+0x4ca36f>, object 0x1197a88, proto 0xad0e52 scanElements# [ast: 0x0001,0x00f8] <+0x9a0e51> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f9fac0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item <load#>load#load#load# in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5ebcc3 <+0x4bbcc2>, object 0x1191e50, proto 0x9ff972 load# [ast: 0x0001,0x0c03] <+0x8cf971> }
-    -- ArcLoader#PageElementLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x2fca020, proto 0x9ff8f0 ArcLoader# [ast: 0x0001,0x0bef] <+0x8cf8ef> }
-  item load#<load#>load#load# in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5f1b03 <+0x4c1b02>, object 0x1191e50, proto 0x9fe262 load# [ast: 0x0001,0x0260] <+0x8ce261> }
-    -- ArcLoader#PageElementLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x2fca020, proto 0x9ff8f0 ArcLoader# [ast: 0x0001,0x0bef] <+0x8cf8ef> }
-  item load#load#<load#>load# in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5f26cf <+0x4c26ce>, object 0x1191e50, proto 0x9fdf96 load# [ast: 0x0001,0x01a9] <+0x8cdf95> }
-    -- ArcLoader#PageElementLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x2fca020, proto 0x9ff8f0 ArcLoader# [ast: 0x0001,0x0bef] <+0x8cf8ef> }
-  item load#load#load#<load#> in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5f2d30 <+0x4c2d2f>, object 0x1191e50, proto 0x9fd97c load# [ast: 0x0001,0x001f] <+0x8cd97b> }
-    -- ArcLoader#PageElementLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x2fca020, proto 0x9ff8f0 ArcLoader# [ast: 0x0001,0x0bef] <+0x8cf8ef> }
-  item <*>scanElements# in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5e7af1 <+0x4b7af0>, object 0x2fc97d0, proto 0xa00990 * [ast: 0x0001,0x1646] <+0x8d098f> }
-    -- load#load#load# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x2fc7ad8, proto 0x9fe178 load# [ast: 0x0001,0x024a] <+0x8ce177> }
-  item *<scanElements#> in ~beta/xml/xml
-  { PC  0x5fa3f6 <+0x4ca3f5>, object 0x2fc97d0, proto 0xad0e52 scanElements# [ast: 0x0001,0x00f8] <+0x9a0e51> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f838c0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item onElement#<onElement#> in ~beta/xml/xml
-  { PC  0x73850e <+0x60850d>, object 0x11921b0, proto 0xad0b3a onElement# [ast: 0x0001,0x0024] <+0x9a0b39> }
-    -- *select# in ~beta/xml/private/xmlbody
-    { Surrounding object 0x11921c0, proto 0xa06b82 * [ast: 0x0007,0x0008] <+0x8d6b81> }
-  item <selector#>selector# in ~beta/xml/xml
-  { PC  0x7382c5 <+0x6082c4>, object 0x11921d0, proto 0xad0f62 selector# [ast: 0x0001,0x0135] <+0x9a0f61> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f9fac0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item selector#<selector#> in ~beta/xml/xml
-  { PC  0x7384b2 <+0x6084b1>, object 0x11921d0, proto 0xad0ba2 selector# [ast: 0x0001,0x0048] <+0x9a0ba1> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f9fac0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item *<select#> in ~beta/xml/xml
-  { PC  0x7384f2 <+0x6084f1>, object 0x11921c0, proto 0xad0b02 select# [ast: 0x0001,0x0020] <+0x9a0b01> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f9fac0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item <*>scan# in ~beta/xml/private/xmlbody
-  { PC  0x5fa3a0 <+0x4ca39f>, object 0x2fc97e8, proto 0xa06b50 * [ast: 0x0007,0x0002] <+0x8d6b4f> }
-    -- *scanElements# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x2fc97d0, proto 0xa00990 * [ast: 0x0001,0x1646] <+0x8d098f> }
-  item *<scan#> in ~beta/xml/xml
-  { PC  0x5fa277 <+0x4ca276>, object 0x2fc97e8, proto 0xad0de8 scan# [ast: 0x0001,0x00e3] <+0x9a0de7> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f838c0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item *<scanElements#> in ~beta/xml/xml
-  { PC  0x5fa370 <+0x4ca36f>, object 0x2fc97d0, proto 0xad0e52 scanElements# [ast: 0x0001,0x00f8] <+0x9a0e51> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f838c0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item <load#>load#load# in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5e7444 <+0x4b7443>, object 0x2fc7ad8, proto 0x9fe178 load# [ast: 0x0001,0x024a] <+0x8ce177> }
-    -- CPNPageLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x2fb55b8, proto 0x9fe0f6 CPNPageLoader# [ast: 0x0001,0x0236] <+0x8ce0f5> }
-  item load#<load#>load# in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5f26cf <+0x4c26ce>, object 0x2fc7ad8, proto 0x9fdf96 load# [ast: 0x0001,0x01a9] <+0x8cdf95> }
-    -- CPNPageLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x2fb55b8, proto 0x9fe0f6 CPNPageLoader# [ast: 0x0001,0x0236] <+0x8ce0f5> }
-  item load#load#<load#> in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5f2d30 <+0x4c2d2f>, object 0x2fc7ad8, proto 0x9fd97c load# [ast: 0x0001,0x001f] <+0x8cd97b> }
-    -- CPNPageLoader#CPNetEntityLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x2fb55b8, proto 0x9fe0f6 CPNPageLoader# [ast: 0x0001,0x0236] <+0x8ce0f5> }
-  item <*>scanElements# in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5e3b2d <+0x4b3b2c>, object 0x2fc7b60, proto 0xa017b2 * [ast: 0x0001,0x1e66] <+0x8d17b1> }
-    -- * in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x2fb5518, proto 0xa016bc * [ast: 0x0001,0x1dfc] <+0x8d16bb> }
-  item *<scanElements#> in ~beta/xml/xml
-  { PC  0x5fa3f6 <+0x4ca3f5>, object 0x2fc7b60, proto 0xad0e52 scanElements# [ast: 0x0001,0x00f8] <+0x9a0e51> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f811d0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item onElement#<onElement#> in ~beta/xml/xml
-  { PC  0x73850e <+0x60850d>, object 0x2fc7b78, proto 0xad0b3a onElement# [ast: 0x0001,0x0024] <+0x9a0b39> }
-    -- *select# in ~beta/xml/private/xmlbody
-    { Surrounding object 0x2fc7b98, proto 0xa06b82 * [ast: 0x0007,0x0008] <+0x8d6b81> }
-  item <selector#>selector# in ~beta/xml/xml
-  { PC  0x7382c5 <+0x6082c4>, object 0x2fc7b88, proto 0xad0f62 selector# [ast: 0x0001,0x0135] <+0x9a0f61> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f838c0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item selector#<selector#> in ~beta/xml/xml
-  { PC  0x7384b2 <+0x6084b1>, object 0x2fc7b88, proto 0xad0ba2 selector# [ast: 0x0001,0x0048] <+0x9a0ba1> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f838c0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item *<select#> in ~beta/xml/xml
-  { PC  0x7384f2 <+0x6084f1>, object 0x2fc7b98, proto 0xad0b02 select# [ast: 0x0001,0x0020] <+0x9a0b01> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f838c0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item <*>scan# in ~beta/xml/private/xmlbody
-  { PC  0x5fa3a0 <+0x4ca39f>, object 0x2fc7ba8, proto 0xa06b50 * [ast: 0x0007,0x0002] <+0x8d6b4f> }
-    -- *scanElements# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x2fc7b60, proto 0xa017b2 * [ast: 0x0001,0x1e66] <+0x8d17b1> }
-  item *<scan#> in ~beta/xml/xml
-  { PC  0x5fa277 <+0x4ca276>, object 0x2fc7ba8, proto 0xad0de8 scan# [ast: 0x0001,0x00e3] <+0x9a0de7> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f811d0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item *<scanElements#> in ~beta/xml/xml
-  { PC  0x5fa370 <+0x4ca36f>, object 0x2fc7b60, proto 0xad0e52 scanElements# [ast: 0x0001,0x00f8] <+0x9a0e51> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f811d0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item <*> in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5e32b7 <+0x4b32b6>, object 0x2fb5518, proto 0xa016bc * [ast: 0x0001,0x1dfc] <+0x8d16bb> }
-    -- load#load# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x2fb5528, proto 0x9fdcc6 load# [ast: 0x0001,0x00ff] <+0x8cdcc5> }
-  item <load#>load# in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5e2ffb <+0x4b2ffa>, object 0x2fb5528, proto 0x9fdcc6 load# [ast: 0x0001,0x00ff] <+0x8cdcc5> }
-    -- CPNetLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x2fb5660, proto 0x9fdc80 CPNetLoader# [ast: 0x0001,0x00f7] <+0x8cdc7f> }
-  item load#<load#> in C:/cpn2000/cpnet/cpnetxml
-  { PC  0x5f2d30 <+0x4c2d2f>, object 0x2fb5528, proto 0x9fd97c load# [ast: 0x0001,0x001f] <+0x8cd97b> }
-    -- CPNetLoader#Loader# in C:/cpn2000/cpnet/cpnetxml
-    { Surrounding object 0x2fb5660, proto 0x9fdc80 CPNetLoader# [ast: 0x0001,0x00f7] <+0x8cdc7f> }
-  item <*> in C:/cpn2000/cpntools/private/cpnworkspacebody
-  { PC  0x5d57c0 <+0x4a57bf>, object 0x2fb5650, proto 0x9fb8fc * [ast: 0x0003,0x0094] <+0x8cb8fb> }
-    -- processCPNet# in C:/cpn2000/cpntools/cpnworkspace
-    { Surrounding object 0x2fb65d0, proto 0xa69cfa processCPNet# [ast: 0x0001,0x0643] <+0x939cf9> }
-  item <processCPNet#> in C:/cpn2000/cpntools/cpnworkspace
-  { PC  0x5d5737 <+0x4a5736>, object 0x2fb65d0, proto 0xa69cfa processCPNet# [ast: 0x0001,0x0643] <+0x939cf9> }
-    -- WorkspaceElements# in C:/cpn2000/cpntools/cpnworkspace
-    { Surrounding object 0x2fb4f90, proto 0xa69cba WorkspaceElements# [ast: 0x0001,0x063f] <+0x939cb9> }
-  item <*>scanElements# in C:/cpn2000/cpntools/private/cpnworkspacebody
-  { PC  0x5d5d95 <+0x4a5d94>, object 0x2fb5690, proto 0x9fbac2 * [ast: 0x0004,0x00cc] <+0x8cbac1> }
-    -- * in C:/cpn2000/cpntools/private/cpnworkspacebody
-    { Surrounding object 0x2fb5738, proto 0x9fb930 * [ast: 0x0004,0x0003] <+0x8cb92f> }
-  item *<scanElements#> in ~beta/xml/xml
-  { PC  0x5fa3f6 <+0x4ca3f5>, object 0x2fb5690, proto 0xad0e52 scanElements# [ast: 0x0001,0x00f8] <+0x9a0e51> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f811b0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item onElement#<onElement#> in ~beta/xml/xml
-  { PC  0x73850e <+0x60850d>, object 0x2fb56a8, proto 0xad0b3a onElement# [ast: 0x0001,0x0024] <+0x9a0b39> }
-    -- *select# in ~beta/xml/private/xmlbody
-    { Surrounding object 0x2fb56c8, proto 0xa06b82 * [ast: 0x0007,0x0008] <+0x8d6b81> }
-  item <selector#>selector# in ~beta/xml/xml
-  { PC  0x7382c5 <+0x6082c4>, object 0x2fb56b8, proto 0xad0f62 selector# [ast: 0x0001,0x0135] <+0x9a0f61> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f811d0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item selector#<selector#> in ~beta/xml/xml
-  { PC  0x7384b2 <+0x6084b1>, object 0x2fb56b8, proto 0xad0ba2 selector# [ast: 0x0001,0x0048] <+0x9a0ba1> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f811d0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item *<select#> in ~beta/xml/xml
-  { PC  0x7384f2 <+0x6084f1>, object 0x2fb56c8, proto 0xad0b02 select# [ast: 0x0001,0x0020] <+0x9a0b01> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f811d0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item <*>scan# in ~beta/xml/private/xmlbody
-  { PC  0x5fa3a0 <+0x4ca39f>, object 0x2fb56d8, proto 0xa06b50 * [ast: 0x0007,0x0002] <+0x8d6b4f> }
-    -- *scanElements# in C:/cpn2000/cpntools/private/cpnworkspacebody
-    { Surrounding object 0x2fb5690, proto 0x9fbac2 * [ast: 0x0004,0x00cc] <+0x8cbac1> }
-  item *<scan#> in ~beta/xml/xml
-  { PC  0x5fa277 <+0x4ca276>, object 0x2fb56d8, proto 0xad0de8 scan# [ast: 0x0001,0x00e3] <+0x9a0de7> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f811b0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item *<scanElements#> in ~beta/xml/xml
-  { PC  0x5fa370 <+0x4ca36f>, object 0x2fb5690, proto 0xad0e52 scanElements# [ast: 0x0001,0x00f8] <+0x9a0e51> }
-    -- Element#AbstractElement# in ~beta/xml/xml
-    { Surrounding object 0x2f811b0, proto 0xad0cfa Element# [ast: 0x0001,0x00af] <+0x9a0cf9> }
-  item <*> in C:/cpn2000/cpntools/private/cpnworkspacebody
-  { PC  0x5d5cba <+0x4a5cb9>, object 0x2fb5738, proto 0x9fb930 * [ast: 0x0004,0x0003] <+0x8cb92f> }
-    -- unPack# in C:/cpn2000/cpntools/cpnworkspace
-    { Surrounding object 0x2fb6608, proto 0xa69d42 unPack# [ast: 0x0001,0x0669] <+0x939d41> }
-  item <unPack#> in C:/cpn2000/cpntools/cpnworkspace
-  { PC  0x5d5a9d <+0x4a5a9c>, object 0x2fb6608, proto 0xa69d42 unPack# [ast: 0x0001,0x0669] <+0x939d41> }
-    -- WorkspaceElements# in C:/cpn2000/cpntools/cpnworkspace
-    { Surrounding object 0x2fb4f90, proto 0xa69cba WorkspaceElements# [ast: 0x0001,0x063f] <+0x939cb9> }
-  item <*> in C:/cpn2000/cpntools/instruments/private/netinstrumentsbody
-  { PC  0x4e4605 <+0x3b4604>, object 0x2f80d88, proto 0x9cb9a2 * [ast: 0x0003,0x0074] <+0x89b9a1> }
-    -- loadNetFromDisc# in C:/cpn2000/cpntools/instruments/private/netinstrumentsbody
-    { Surrounding object 0x2f80d98, proto 0x9cb82c loadNetFromDisc# [ast: 0x0003,0x002a] <+0x89b82b> }
-  item <loadNetFromDisc#> in C:/cpn2000/cpntools/instruments/private/netinstrumentsbody
-  { PC  0x4e3b5b <+0x3b3b5a>, object 0x2f80d98, proto 0x9cb82c loadNetFromDisc# [ast: 0x0003,0x002a] <+0x89b82b> }
-    -- * in C:/cpn2000/cpntools/instruments/private/netinstrumentsbody
-    { Surrounding object 0x2f7e8a8, proto 0x9cb784 * [ast: 0x0003,0x0002] <+0x89b783> }
-  item <loadSavedNet#> in C:/cpn2000/cpntools/instruments/private/netinstrumentsbody
-  { PC  0x4e349d <+0x3b349c>, object 0x2f7e8e8, proto 0x9cbbce loadSavedNet# [ast: 0x0003,0x01fc] <+0x89bbcd> }
-    -- * in C:/cpn2000/cpntools/instruments/private/netinstrumentsbody
-    { Surrounding object 0x2f7e8a8, proto 0x9cb784 * [ast: 0x0003,0x0002] <+0x89b783> }
-  item <*> in C:/cpn2000/cpntools/instruments/private/netinstrumentsbody
-  { PC  0x4e2325 <+0x3b2324>, object 0x2f7e8a8, proto 0x9cb784 * [ast: 0x0003,0x0002] <+0x89b783> }
-    -- apply#apply#apply# in C:/cpn2000/cpntools/instruments/netinstruments
-    { Surrounding object 0x2f7f000, proto 0xa52726 apply# [ast: 0x0001,0x049f] <+0x922725> }
-  item <apply#>apply#apply# in C:/cpn2000/cpntools/instruments/netinstruments
-  { PC  0x4e2222 <+0x3b2221>, object 0x2f7f000, proto 0xa52726 apply# [ast: 0x0001,0x049f] <+0x922725> }
-    -- LoadNetCommand#CPNcommand#Command#Notifier#Element# in C:/cpn2000/cpntools/instruments/netinstruments
-    { Surrounding object 0x2f7ed68, proto 0xa5258a LoadNetCommand# [ast: 0x0001,0x045d] <+0x922589> }
-  item apply#<apply#>apply# in C:/cpn2000/cpntools/instruments/cpncommands
-  { PC  0x6d93d6 <+0x5a93d5>, object 0x2f7f000, proto 0xa7a914 apply# [ast: 0x0001,0x0172] <+0x94a913> }
-    -- LoadNetCommand#CPNcommand#Command#Notifier#Element# in C:/cpn2000/cpntools/instruments/netinstruments
-    { Surrounding object 0x2f7ed68, proto 0xa5258a LoadNetCommand# [ast: 0x0001,0x045d] <+0x922589> }
-  item apply#apply#<apply#> in ~beta/postwimp/workspace
-  { PC  0x72dd6a <+0x5fdd69>, object 0x2f7f000, proto 0xabdf38 apply# [ast: 0x0001,0x024e] <+0x98df37> }
-    -- LoadNetCommand#CPNcommand#Command#Notifier#Element# in C:/cpn2000/cpntools/instruments/netinstruments
-    { Surrounding object 0x2f7ed68, proto 0xa5258a LoadNetCommand# [ast: 0x0001,0x045d] <+0x922589> }
-  item <execute#> in C:/cpn2000/cpntools/instruments/cpncommands
-  { PC  0x6d9aaf <+0x5a9aae>, object 0x2f7e970, proto 0xa7a22e execute# [ast: 0x0001,0x0007] <+0x94a22d> }
-    -- HistoryCommandManager# in C:/cpn2000/cpntools/instruments/cpncommands
-    { Surrounding object 0x2f7e998, proto 0xa7a1ee HistoryCommandManager# [ast: 0x0001,0x0003] <+0x94a1ed> }
-  item <apply#>apply# in C:/cpn2000/cpntools/instruments/cpninstrument
-  { PC  0x6d447f <+0x5a447e>, object 0x2f7e988, proto 0xa77446 apply# [ast: 0x0001,0x00e4] <+0x947445> }
-    -- CPNnormalInstrument#CPNsimpleinstrument#nonGenericInstrumentWithOptions#Instrument# in C:/cpn2000/cpntools/instruments/cpninstrument
-    { Surrounding object 0x2f7e6a0, proto 0xa77f7e CPNnormalInstrument# [ast: 0x0001,0x0412] <+0x947f7d> }
-  item apply#<apply#> in ~beta/postwimp/foundation/world
-  { PC  0x73418d <+0x60418c>, object 0x2f7e988, proto 0xacb286 apply# [ast: 0x0001,0x0850] <+0x99b285> }
-    -- CPNnormalInstrument#CPNsimpleinstrument#nonGenericInstrumentWithOptions#Instrument# in C:/cpn2000/cpntools/instruments/cpninstrument
-    { Surrounding object 0x2f7e6a0, proto 0xa77f7e CPNnormalInstrument# [ast: 0x0001,0x0412] <+0x947f7d> }
-  item <apply#>apply# in ~beta/postwimp/foundation/world
-  { PC  0x733ba4 <+0x603ba3>, object 0x2f7e9a8, proto 0xacb7e6 apply# [ast: 0x0001,0x09f8] <+0x99b7e5> }
-    -- LoadNetInstrument#CPNinstrument#CPNGenericInstrument#GenericInstrument#EditableInstrument#Instrument# in C:/cpn2000/cpntools/instruments/netinstruments
-    { Surrounding object 0x2f7d598, proto 0xa522a8 LoadNetInstrument# [ast: 0x0001,0x03e5] <+0x9222a7> }
-  item apply#<apply#> in ~beta/postwimp/foundation/world
-  { PC  0x73418d <+0x60418c>, object 0x2f7e9a8, proto 0xacb286 apply# [ast: 0x0001,0x0850] <+0x99b285> }
-    -- LoadNetInstrument#CPNinstrument#CPNGenericInstrument#GenericInstrument#EditableInstrument#Instrument# in C:/cpn2000/cpntools/instruments/netinstruments
-    { Surrounding object 0x2f7d598, proto 0xa522a8 LoadNetInstrument# [ast: 0x0001,0x03e5] <+0x9222a7> }
-  item <*>scan# in C:/cpn2000/cpntools/private/cpnworkspacebody
-  { PC  0x5d698b <+0x4a698a>, object 0x2f7d638, proto 0x9fbbea * [ast: 0x0005,0x0085] <+0x8cbbe9> }
-    -- * in C:/cpn2000/cpntools/private/cpnworkspacebody
-    { Surrounding object 0x2f7d678, proto 0x9fbaf6 * [ast: 0x0005,0x0002] <+0x8cbaf5> }
-  item *<scan#> in ~beta/containers/container
-  { PC  0x60e6ed <+0x4de6ec>, object 0x2f7d638, proto 0xada38a scan# [ast: 0x0001,0x0073] <+0x9aa389> }
-    -- filenames#list#container# in C:/cpn2000/cpntools/private/cpnworkspacebody
-    { Surrounding object 0x2f7d688, proto 0x9fbb38 filenames# [ast: 0x0005,0x000a] <+0x8cbb37> }
-  item <thescanner#>theScanner# in ~beta/containers/list
-  { PC  0x60d80c <+0x4dd80b>, object 0x2f7da70, proto 0xad9ba0 thescanner# [ast: 0x0001,0x0179] <+0x9a9b9f> }
-    -- filenames#list#container# in C:/cpn2000/cpntools/private/cpnworkspacebody
-    { Surrounding object 0x2f7d688, proto 0x9fbb38 filenames# [ast: 0x0005,0x000a] <+0x8cbb37> }
-  item thescanner#<theScanner#> in ~beta/containers/container
-  { PC  0x60e625 <+0x4de624>, object 0x2f7da70, proto 0xada350 theScanner# [ast: 0x0001,0x005b] <+0x9aa34f> }
-    -- filenames#list#container# in C:/cpn2000/cpntools/private/cpnworkspacebody
-    { Surrounding object 0x2f7d688, proto 0x9fbb38 filenames# [ast: 0x0005,0x000a] <+0x8cbb37> }
-  item *<scan#> in ~beta/containers/container
-  { PC  0x60e6e1 <+0x4de6e0>, object 0x2f7d638, proto 0xada38a scan# [ast: 0x0001,0x0073] <+0x9aa389> }
-    -- filenames#list#container# in C:/cpn2000/cpntools/private/cpnworkspacebody
-    { Surrounding object 0x2f7d688, proto 0x9fbb38 filenames# [ast: 0x0005,0x000a] <+0x8cbb37> }
-  item <*> in C:/cpn2000/cpntools/private/cpnworkspacebody
-  { PC  0x5d674d <+0x4a674c>, object 0x2f7d678, proto 0x9fbaf6 * [ast: 0x0005,0x0002] <+0x8cbaf5> }
-    -- parseArguments# in C:/cpn2000/cpntools/cpnworkspace
-    { Surrounding object 0x2f7db10, proto 0xa6a398 parseArguments# [ast: 0x0001,0x08fe] <+0x93a397> }
-  item <parseArguments#> in C:/cpn2000/cpntools/cpnworkspace
-  { PC  0x5d6461 <+0x4a6460>, object 0x2f7db10, proto 0xa6a398 parseArguments# [ast: 0x0001,0x08fe] <+0x93a397> }
-    -- PROGRAM-~CPNWorkSpace#Workspace#World#SystemEnv#SysHead# in C:/cpn2000/cpntools/cpntools
-    { Surrounding object 0x2dfb938, proto 0xa0e0a0 PROGRAM-~ [ast: 0x0001,0x0001] <+0x8de09f> }
-  comp PROGRAM-~<CPNWorkSpace#>Workspace#World#SystemEnv#SysHead# in C:/cpn2000/cpntools/cpnworkspace
-  { PC  0x6c01d9 <+0x5901d8>, object 0x2dfb938, proto 0xa68844 CPNWorkSpace# [ast: 0x0001,0x0003] <+0x938843> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  comp PROGRAM-~CPNWorkSpace#<Workspace#>World#SystemEnv#SysHead# in ~beta/postwimp/workspace
-  { PC  0x7105be <+0x5e05bd>, object 0x2dfb938, proto 0xabd3b6 Workspace# [ast: 0x0001,0x0003] <+0x98d3b5> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  comp PROGRAM-~CPNWorkSpace#Workspace#<World#>SystemEnv#SysHead# in ~beta/postwimp/foundation/world
-  { PC  0x72ebe5 <+0x5febe4>, object 0x2dfb938, proto 0xac97b4 World# [ast: 0x0001,0x00c6] <+0x9997b3> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  comp PROGRAM-~CPNWorkSpace#Workspace#World#<SystemEnv#>SysHead# in ~beta/basiclib/basicsystemenv
-  { PC  0x740cac <+0x610cab>, object 0x2dfb938, proto 0xada85c SystemEnv# [ast: 0x0001,0x002e] <+0x9aa85b> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  comp PROGRAM-~CPNWorkSpace#Workspace#World#SystemEnv#<SysHead#> in ~beta/basiclib/basicsystemenv
-  { PC  0x740b57 <+0x610b56>, object 0x2dfb938, proto 0xadb516 SysHead# [ast: 0x0001,0x0310] <+0x9ab515> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-
-  item <attNext#>realValue# in ~beta/basiclib/private/basicsystemenvbody
-  { PC  0x6108b6 <+0x4e08b5>, object 0x2dfb8e8, proto 0xa0c9d0 attNext# [ast: 0x0010,0x001a] <+0x8dc9cf> }
-    -- BASICSYSTEMENVPRIVATE-~ in ~beta/basiclib/private/basicsystemenvbody
-    { Surrounding object 0x2dfb6e8, proto 0xa0c8d4 BASICSYSTEMENVPRIVATE-~ [ast: 0x0010,0x0001] <+0x8dc8d3> }
-  item attNext#<realValue#> in ~beta/basiclib/betaenv
-  { PC  0x4028c5 <+0x2d28c4>, object 0x2dfb8e8, proto 0x94e7fe realValue# [ast: 0x0001,0x0150] <+0x81e7fd> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  item <UIIdle#>booleanValue# in ~beta/guienv/private/winnt/guienvntsystemenvbody
-  { PC  0x44cfa8 <+0x31cfa7>, object 0x2dff918, proto 0x96dc06 UIIdle# [ast: 0x0005,0x0028] <+0x83dc05> }
-    -- PIOPRIVATE-~ in ~beta/guienv/private/winnt/guienvntsystemenvbody
-    { Surrounding object 0x2dfb5f8, proto 0x96db8e PIOPRIVATE-~ [ast: 0x0005,0x0001] <+0x83db8d> }
-  item UIIdle#<booleanValue#> in ~beta/basiclib/betaenv
-  { PC  0x40290b <+0x2d290a>, object 0x2dff918, proto 0x94e6a2 booleanValue# [ast: 0x0001,0x0104] <+0x81e6a1> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  item <processOneEvent#> in ~beta/guienv/private/winnt/guienv_ntiprivate
-  { PC  0x4ab280 <+0x37b27f>, object 0x2dffad0, proto 0x9acb68 processOneEvent# [ast: 0x0001,0x0018] <+0x87cb67> }
-    -- GUIenv# in ~beta/guienv/guienv
-    { Surrounding object 0x2dfc940, proto 0x9b85fc GUIenv# [ast: 0x0001,0x0003] <+0x8885fb> }
-  item <mainLoop#> in ~beta/guienv/private/winnt/guienv_ntiprivate
-  { PC  0x4ab7b3 <+0x37b7b2>, object 0x2dffac0, proto 0x9acb24 mainLoop# [ast: 0x0001,0x0003] <+0x87cb23> }
-    -- GUIenv# in ~beta/guienv/guienv
-    { Surrounding object 0x2dfc940, proto 0x9b85fc GUIenv# [ast: 0x0001,0x0003] <+0x8885fb> }
-  item <GUIenv#> in ~beta/guienv/guienv
-  { PC  0x4a8be7 <+0x378be6>, object 0x2dfc940, proto 0x9b85fc GUIenv# [ast: 0x0001,0x0003] <+0x8885fb> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  item <start#> in ~beta/guienv/private/winnt/guienvntsystemenvbody
-  { PC  0x44c912 <+0x31c911>, object 0x2dfce40, proto 0x96ddc4 start# [ast: 0x0005,0x01aa] <+0x83ddc3> }
-    -- PIOPRIVATE-~ in ~beta/guienv/private/winnt/guienvntsystemenvbody
-    { Surrounding object 0x2dfb5f8, proto 0x96db8e PIOPRIVATE-~ [ast: 0x0005,0x0001] <+0x83db8d> }
-  comp <BASICSCHEDULER-~>SysHead# in ~beta/guienv/private/winnt/guienvntsystemenvbody
-  { PC  0x44ba90 <+0x31ba8f>, object 0x2dfce68, proto 0x96dade BASICSCHEDULER-~ [ast: 0x0002,0x0001] <+0x83dadd> }
-    -- PROGRAM-~CPNWorkSpace#Workspace#World#SystemEnv#SysHead# in C:/cpn2000/cpntools/cpntools
-    { Surrounding object 0x2dfb938, proto 0xa0e0a0 PROGRAM-~ [ast: 0x0001,0x0001] <+0x8de09f> }
-  comp BASICSCHEDULER-~<SysHead#> in ~beta/basiclib/basicsystemenv
-  { PC  0x740b57 <+0x610b56>, object 0x2dfce68, proto 0xadb516 SysHead# [ast: 0x0001,0x0310] <+0x9ab515> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-
-  item <*> in ~beta/basiclib/betaenv
-  { PC  0x48b24c <+0x35b24b>, object 0x2dfce30, proto 0x9509aa * [ast: 0x0001,0x0c3c] <+0x8209a9> }
-    -- BETAENV-~ in ~beta/basiclib/betaenv
-    { Surrounding object 0x2dfb400, proto 0x94e3a0 BETAENV-~ [ast: 0x0001,0x0001] <+0x81e39f> }
-  basic component in ~beta/basiclib/betaenv
-
-Legend:
-
-The above dumps show the dynamic call stack of invoked objects.
-Each dump starts at the object that was the current object when
-the error occurred and continues down towards the basic component.
-The descriptions have the following meaning:
-1. Items are shown in two lines, like this:
-      item <name#>pname1#pname2#pname3 in ifile
-        -- sname#spname1#spname2 in sfile
-   meaning that the item is an instance of the pattern "name" which
-   has prefix "pname1" which has prefix "pname2", etc. 
-   This item is defined in the file "ifile". 
-   The part of the prefix chain enclosed in "<" and ">" indicates
-   where in the action sequence the error occurred.
-   The line beginning with "--" shows the textually surrounding
-   pattern using the same notation.
-2. The descriptor names used in the above description will normally
-   have one or more "meta characters" appended. These mean:
-      #  The descriptor belongs to a pattern, e.g. P: (# ... #)
-      ~  Singular named descriptor, e.g. X: @(# ... #)
-      *  Singular unnamed descriptor, e.g. ... ; (# ... #) ; ...
-      -  Descriptor SLOT.
-3. Components are shown using a notation similar to that of items:
-      comp <name#>pname1#pname2#pname3 in cfile
-4. The bottommost component corresponding to the basic environment is
-   shown like an ordinary component, but indicated with
-      basic component <name#>pname1#pname2#pname3 in cfile
-5. In case the error occurred in some external code called from BETA,
-   the top of the call stack is shown as
-      [ EXTERNAL ACTIVATION PART ]
-6. In case the BETA code has called some external code which has in
-   turn called back into the BETA code, and the callback is still
-   active at the point of the error, the intermediate call stack part
-   is shown as
-      [ EXTERNAL ACTIVATION PART ]
-7. The section labeled "Low level information" can be avoided by
-      set BETART=SimpleDump
-   before subsequent executions of the program.

@@ -627,6 +627,13 @@ public class EPC2CPN extends JFrame implements ActionListener {
 											if (shapeName!=null && shapeName.length == 3) {
 												colset = shapeName[0];
 												initMark = shapeName[2];
+												
+//												if (!Constant.CPN_COLSET_STRING.equals(colset)
+//														||!Constant.CPN_COLSET_INT.equals(colset)
+//														||!Constant.CPN_COLSET_BOOL.equals(colset)
+//														||!Constant.CPN_COLSET_UNIT.equals(colset)) {
+//													throw new Exception("Invalid Colset Type.");
+//												}
 											} else {
 												shapeName = new String[3];
 												shapeName[0] = Constant.CPN_COLSET_STRING;
@@ -1092,6 +1099,7 @@ public class EPC2CPN extends JFrame implements ActionListener {
 				elementInfo = cpnTemplate.replaceAll("#TRANSFORM_ITEM", transformItem)
 						.replaceAll("#TRANSFORM_VARIABLE", transformVariable);
 			}
+			
 			
 			JOptionPane.showMessageDialog(frame, "Confirm marking.", "EPC Element", JOptionPane.INFORMATION_MESSAGE);
 			btnGenerateCPN.setEnabled(true);
